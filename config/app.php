@@ -50,11 +50,17 @@ return [
     | the Artisan command line tool. You should set this to the root of
     | your application so that it is used when running Artisan tasks.
     |
+    | client_customer_url 前端项目-前台 的url
+    | client_admin_url    前端项目-后台 的url
     */
 
     'url' => env('APP_URL', 'http://localhost'),
 
     'asset_url' => env('ASSET_URL', null),
+
+    'client_customer_url' => env('CLIENT_CUSTOMER_URL', 'http://localhost:8080'),
+
+    'client_admin_url' => env('CLIENT_ADMIN_URL', 'http://localhost:8080'),
 
     /*
     |--------------------------------------------------------------------------
@@ -78,9 +84,15 @@ return [
     | by the translation service provider. You are free to set this value
     | to any of the locales which will be supported by the application.
     |
+    | 默认语言为中文简体，支持的语言有 英语-美式，中文-简体
     */
 
-    'locale' => 'en',
+    'locale' => 'zh-CN',
+
+    'locales' => [
+        'en-US' => 'English',
+        'zh-CN' => '中文',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +105,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'zh-CN',
 
     /*
     |--------------------------------------------------------------------------
