@@ -13,6 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/', function () {
-    return ['api'=>'api list'];
+Route::middleware('auth:api')->get('/permission', function (Request $request) {
+    return $request->user();
 });

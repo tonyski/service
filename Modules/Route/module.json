@@ -1,0 +1,13 @@
+{
+    "name": "Route",
+    "alias": "route",
+    "description": "侧边栏入口管理",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Route\\Providers\\RouteServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

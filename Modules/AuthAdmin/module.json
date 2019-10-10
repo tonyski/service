@@ -1,0 +1,13 @@
+{
+    "name": "AuthAdmin",
+    "alias": "authadmin",
+    "description": "认证管理员",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\AuthAdmin\\Providers\\AuthAdminServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

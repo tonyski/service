@@ -1,0 +1,13 @@
+{
+    "name": "AuthCustomer",
+    "alias": "authcustomer",
+    "description": "前台客户认证",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\AuthCustomer\\Providers\\AuthCustomerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
