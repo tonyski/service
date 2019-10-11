@@ -13,6 +13,11 @@ php artisan key:generate
 
 ```
 
+### 生成 JWT_SECRET
+```
+php artisan jwt:secret
+```
+
 ### 修改配置,测试
 ```
 cp .env .env.testing

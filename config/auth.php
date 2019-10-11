@@ -1,6 +1,14 @@
 <?php
 
 return [
+    /*
+     |--------------------------------------------------------------------------
+     |认证 guard 说明
+     |--------------------------------------------------------------------------
+     |customer    前台用户认证
+     |admin       后台管理员认证
+     |supplier    供应商认证
+     */
 
     /*
     |--------------------------------------------------------------------------
@@ -14,7 +22,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'api',
         'passwords' => 'users',
     ],
 
@@ -46,6 +54,18 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'customer' => [
+            'driver' => 'jwt',
+            'provider' => 'customers',
+            'hash' => false,
+        ],
+
+        'admin' => [
+            'driver' => 'jwt',
+            'provider' => 'admins',
+            'hash' => false,
+        ],
     ],
 
     /*
@@ -71,10 +91,15 @@ return [
             'model' => App\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => Sniper\AuthCustomer\Models\Customer::class,
+        ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => Modules\Admin\Entities\Admin::class,
+        ],
     ],
 
     /*
@@ -96,6 +121,18 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
+        'customer' => [
+            'provider' => 'customers',
+            'table' => 'customers_password_resets',
+            'expire' => 60,
+        ],
+
+        'admin' => [
+            'provider' => 'admins',
+            'table' => 'admins_password_resets',
             'expire' => 60,
         ],
     ],
