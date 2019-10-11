@@ -18,6 +18,11 @@ php artisan key:generate
 php artisan jwt:secret
 ```
 
+### 填充数据库必须的数据
+```
+php artisan module:seedinit
+```
+
 ### 修改配置,测试
 ```
 cp .env .env.testing
