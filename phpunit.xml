@@ -18,7 +18,11 @@
         </testsuite>
 
         <testsuite name="AuthAdmin">
-            <directory suffix="Test.php">./Modules/AuthAdmin/Tests/Feature</directory>
+            <directory suffix="Test.php">./Modules/AuthAdmin/Tests</directory>
+        </testsuite>
+
+        <testsuite name="AuthCustomer">
+            <directory suffix="Test.php">./Modules/AuthCustomer/Tests</directory>
         </testsuite>
     </testsuites>
     <filter>

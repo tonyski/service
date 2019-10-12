@@ -93,7 +93,7 @@ return [
 
         'customers' => [
             'driver' => 'eloquent',
-            'model' => Sniper\AuthCustomer\Models\Customer::class,
+            'model' => Modules\AuthCustomer\Entities\Customer::class,
         ],
 
         'admins' => [

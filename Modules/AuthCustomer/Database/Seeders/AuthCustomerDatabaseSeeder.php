@@ -16,6 +16,7 @@ class AuthCustomerDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
+        factory(\Modules\AuthCustomer\Entities\Customer::class, 10)->create();
         // $this->call("OthersTableSeeder");
     }
 }

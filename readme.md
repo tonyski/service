@@ -18,8 +18,9 @@ php artisan key:generate
 php artisan jwt:secret
 ```
 
-### 填充数据库必须的数据
+### 迁移数据表，填充数据库必须的数据
 ```
+php artisan migrate
 php artisan module:seedinit
 ```
 

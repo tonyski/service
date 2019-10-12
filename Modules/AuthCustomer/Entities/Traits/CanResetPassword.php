@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\AuthAdmin\Entities\Traits;
+namespace Modules\AuthCustomer\Entities\Traits;
 
-use Modules\AuthAdmin\Notifications\AdminResetPassword as ResetPasswordNotification;
+use Modules\AuthCustomer\Notifications\CustomerResetPassword as ResetPasswordNotification;
 
 trait CanResetPassword
 {

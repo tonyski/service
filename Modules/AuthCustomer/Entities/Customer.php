@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\Admin\Entities;
+namespace Modules\AuthCustomer\Entities;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Modules\AuthAdmin\Entities\Traits\CanResetPassword;
+use Modules\AuthCustomer\Entities\Traits\CanResetPassword;
 
-class Admin extends Authenticatable implements JWTSubject
+class Customer extends Authenticatable implements JWTSubject
 {
     use Notifiable,CanResetPassword;
 
@@ -25,6 +25,15 @@ class Admin extends Authenticatable implements JWTSubject
 
     protected $hidden = [
         'password',
+    ];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
     ];
 
     /**

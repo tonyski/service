@@ -1,7 +1,7 @@
 {
     "name": "AuthCustomer",
     "alias": "authcustomer",
-    "description": "前台客户认证",
+    "description": "前台用户认证",
     "keywords": [],
     "order": 0,
     "providers": [
