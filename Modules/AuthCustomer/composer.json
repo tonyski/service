@@ -7,6 +7,9 @@
             "email": "fly.fei@feisu.com"
         }
     ],
+    "require": {
+        "tymon/jwt-auth": "^1.0.0-rc.5"
+    },
     "extra": {
         "laravel": {
             "providers": [

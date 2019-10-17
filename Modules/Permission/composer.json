@@ -7,6 +7,9 @@
             "email": "fly.fei@feisu.com"
         }
     ],
+    "require": {
+        "spatie/laravel-permission": "^3.0"
+    },
     "extra": {
         "laravel": {
             "providers": [
