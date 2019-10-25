@@ -9,7 +9,7 @@ use Modules\AuthCustomer\Entities\Traits\CanResetPassword;
 
 class Customer extends Authenticatable implements JWTSubject
 {
-    use Notifiable,CanResetPassword;
+    use Notifiable, CanResetPassword;
 
     protected $primaryKey = 'uuid';
 
@@ -17,10 +17,8 @@ class Customer extends Authenticatable implements JWTSubject
 
     public $incrementing = false;
 
-    protected $guarded = [];
-
     protected $fillable = [
-        'uuid','name', 'email', 'password',
+        'uuid', 'name', 'email', 'password',
     ];
 
     protected $hidden = [

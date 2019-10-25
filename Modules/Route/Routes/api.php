@@ -1,18 +1,45 @@
 <?php
 
-use Illuminate\Http\Request;
+Route::get('admin/fetchMenu', function () {
+    $data = [
+        'index' => [
+            'uuid' => 'i-1',
+            'name' => 'home',
+            'route' => '/home',
+            'locale' => '首页入口',
+            'comment' => '备注',
+        ],
+        'menu' => [
+            [
+                'uuid' => '0',
+                'parent_uuid' => '',
+                'name' => 'system',
+                'icon' => 'ios-navigate',
+                'comment' => '备注',
+                'locale' => '系统设置',
+                'route' => [
+                    [
+                        'uuid' => '0-1',
+                        'name' => 'permission',
+                        'route' => '/permission',
+                        'locale' => '权限管理',
+                        'comment' => '备注',
+                    ]
+                ],
+                'menu' => []
+            ]
+        ]
+    ];
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+    $returnData = [
+        'status'=>'success',
+        'code'=>200,
+        'message'=>'ok',
+        'data'=>$data
+    ];
 
-Route::middleware('auth:api')->get('/route', function (Request $request) {
-    return $request->user();
+    return $returnData;
 });
+
+
+

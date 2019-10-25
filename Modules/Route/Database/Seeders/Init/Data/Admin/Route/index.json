@@ -1,0 +1,14 @@
+[
+  {
+    "permission": "home",
+    "uuid": "",
+    "guard_name": "",
+    "route": "/home",
+    "name": "home",
+    "locale": {
+      "en-US": "default home page",
+      "zh-CN": "默认首页"
+    },
+    "comment": "默认首页入口"
+  }
+]

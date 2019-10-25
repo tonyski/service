@@ -1,0 +1,15 @@
+{
+  "入口组": [
+    {
+      "uuid": "",
+      "name": "route",
+      "guard_name": "",
+      "type": "",
+      "locale": {
+        "en-US": "route",
+        "zh-CN": "入口"
+      },
+      "comment": "入口权限"
+    }
+  ]
+}

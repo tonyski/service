@@ -1,0 +1,14 @@
+[
+  {
+    "permission": "route",
+    "uuid": "",
+    "guard_name": "",
+    "route": "/test",
+    "name": "test",
+    "locale": {
+      "en-US": "Test",
+      "zh-CN": "测试入口"
+    },
+    "comment": "测试入口"
+  }
+]

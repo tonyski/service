@@ -1,0 +1,13 @@
+[
+  {
+    "role": "super",
+    "permission": "all"
+  },
+  {
+    "role": "super",
+    "permission": [
+      "feature",
+      "home"
+    ]
+  }
+]

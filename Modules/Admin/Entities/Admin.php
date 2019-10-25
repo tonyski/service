@@ -6,10 +6,11 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Modules\AuthAdmin\Entities\Traits\CanResetPassword;
+use Modules\Permission\Entities\Traits\HasRoles;
 
 class Admin extends Authenticatable implements JWTSubject
 {
-    use Notifiable,CanResetPassword;
+    use Notifiable, CanResetPassword, HasRoles;
 
     protected $primaryKey = 'uuid';
 
@@ -17,10 +18,8 @@ class Admin extends Authenticatable implements JWTSubject
 
     public $incrementing = false;
 
-    protected $guarded = [];
-
     protected $fillable = [
-        'uuid','name', 'email', 'password',
+        'uuid', 'name', 'email', 'password',
     ];
 
     protected $hidden = [

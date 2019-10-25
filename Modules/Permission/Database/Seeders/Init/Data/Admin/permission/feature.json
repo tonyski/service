@@ -1,0 +1,15 @@
+{
+  "功能组": [
+    {
+      "uuid": "",
+      "name": "feature",
+      "guard_name": "",
+      "type": "",
+      "locale": {
+        "en-US": "feature",
+        "zh-CN": "功能"
+      },
+      "comment": "功能权限"
+    }
+  ]
+}

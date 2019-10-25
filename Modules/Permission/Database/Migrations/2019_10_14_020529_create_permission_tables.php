@@ -18,21 +18,26 @@ class CreatePermissionTables extends Migration
 
         Schema::create($tableNames['permissions'], function (Blueprint $table) {
             $table->char('uuid', 32)->primary();
-            $table->string('name')->comment('权限名，唯一')->unique();
+            $table->string('name')->comment('权限名，唯一');
             $table->string('guard_name');
             $table->unsignedTinyInteger('type')->comment('权限的类型，1，功能权限，2，入口权限，3首页入口权限')->default(1);
             $table->json('locale')->nullable()->default(null)->comment('本地化翻译样例，{"en-US":"Adding user privileges","zh-CN":"添加用户权限"}');
             $table->string('comment')->comment('备注信息')->default('');
             $table->timestamps();
+
+            $table->unique(['name','guard_name']);
         });
 
         Schema::create($tableNames['roles'], function (Blueprint $table) {
             $table->char('uuid', 32)->primary();
-            $table->string('name')->comment('角色名，唯一')->unique();
+            $table->string('name')->comment('角色名，唯一');
             $table->string('guard_name');
             $table->unsignedTinyInteger('is_system')->default(0)->comment('是否系统创建的角色，0：不是，1：是');
-            $table->json('locale')->nullable()->default(null)->comment('国际化样例，{"en-US":"superAdmin","zh-CN":"超管"}');
+            $table->json('locale')->nullable()->default(null)->comment('国际化样例，{"en-US":"SuperAdmin","zh-CN":"超管"}');
+            $table->string('comment')->comment('备注信息')->default('');
             $table->timestamps();
+
+            $table->unique(['name','guard_name']);
         });
 
         //此表为 用户拥有的零时权限

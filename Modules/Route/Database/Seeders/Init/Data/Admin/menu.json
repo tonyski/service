@@ -1,0 +1,30 @@
+[
+  {
+    "parent_name": "",
+    "uuid": "",
+    "parent_uuid": "",
+    "guard_name": "",
+    "name": "menu",
+    "sort": "0",
+    "icon": "ios-navigate",
+    "locale": {
+      "en-US": "Sidebar",
+      "zh-CN": "侧边栏"
+    },
+    "comment": "侧边栏备注"
+  },
+  {
+    "parent_name": "menu",
+    "uuid": "",
+    "parent_uuid": "",
+    "guard_name": "",
+    "name": "menu.menu",
+    "sort": "0",
+    "icon": "ios-navigate",
+    "locale": {
+      "en-US": "Sidebar",
+      "zh-CN": "侧边栏"
+    },
+    "comment": "侧边栏备注"
+  }
+]

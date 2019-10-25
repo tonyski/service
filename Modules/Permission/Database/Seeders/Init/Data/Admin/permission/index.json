@@ -1,0 +1,15 @@
+{
+  "首页组": [
+    {
+      "uuid": "",
+      "name": "home",
+      "guard_name": "",
+      "type": "",
+      "locale": {
+        "en-US": "default home page",
+        "zh-CN": "默认首页"
+      },
+      "comment": "首页权限"
+    }
+  ]
+}
