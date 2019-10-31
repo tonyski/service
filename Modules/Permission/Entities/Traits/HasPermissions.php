@@ -2,15 +2,19 @@
 
 namespace Modules\Permission\Entities\Traits;
 
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Traits\HasPermissions as SpatieHasPermissions;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Contracts\Permission;
+use Modules\Permission\Entities\PermissionType;
 
 trait HasPermissions
 {
     use SpatieHasPermissions;
+    
+    private $indexPermission = null; // 用户的首页权限
 
     /**
      * A model may have multiple direct permissions.
@@ -46,7 +50,7 @@ trait HasPermissions
             $query->whereHas('permissions', function ($query) use ($permissions) {
                 $query->where(function ($query) use ($permissions) {
                     foreach ($permissions as $permission) {
-                        $query->orWhere(config('permission.table_names.permissions').'.uuid', $permission->uuid);
+                        $query->orWhere(config('permission.table_names.permissions') . '.uuid', $permission->uuid);
                     }
                 });
             });
@@ -54,7 +58,7 @@ trait HasPermissions
                 $query->orWhereHas('roles', function ($query) use ($rolesWithPermissions) {
                     $query->where(function ($query) use ($rolesWithPermissions) {
                         foreach ($rolesWithPermissions as $role) {
-                            $query->orWhere(config('permission.table_names.roles').'.uuid', $role->uuid);
+                            $query->orWhere(config('permission.table_names.roles') . '.uuid', $role->uuid);
                         }
                     });
                 });
@@ -82,7 +86,7 @@ trait HasPermissions
             );
         }
 
-        if (! $permission instanceof Permission) {
+        if (!$permission instanceof Permission) {
             throw new PermissionDoesNotExist;
         }
 
@@ -95,12 +99,12 @@ trait HasPermissions
 
         if (is_string($permission)) {
             $permission = $permissionClass->findByName($permission, $this->getDefaultGuardName());
-            if (! $permission) {
+            if (!$permission) {
                 return false;
             }
         }
 
-        if (! $permission instanceof Permission) {
+        if (!$permission instanceof Permission) {
             return false;
         }
 
@@ -181,6 +185,58 @@ trait HasPermissions
         }
 
         return $permissions;
+    }
+
+    /**
+     * 返回首页权限
+     */
+    public function getIndexPermissions()
+    {
+        if (is_null($this->indexPermission)) {
+            $defaultRole = $this->roles()->where('is_default', 1)->first();
+
+            if (!is_null($defaultRole)) {
+                $this->indexPermission = $defaultRole->permissions()->where('type', PermissionType::$PERMISSION_INDEX)->first();
+            }
+        }
+
+        return $this->indexPermission;
+    }
+
+    /**
+     * 返回所有的入口权限
+     */
+    public function getRoutePermissions(): Collection
+    {
+        $permissions = $this->getAllPermissions();
+
+        return $permissions->filter(function ($permission, $key) {
+            return $permission->type == PermissionType::$PERMISSION_ROUTE;
+        });
+
+        /*
+        $relationships = [
+            'permissions' => function ($query) {
+                $query->where('type', PermissionType::$PERMISSION_ROUTE);
+            },
+            'roles',
+            'roles.permissions' => function ($query) {
+                $query->where('type', PermissionType::$PERMISSION_ROUTE);
+            }];
+        $this->load($relationships);
+
+        $permissions = $this->permissions;
+
+        if ($this->roles) {
+            $rolesPermissions = $this->roles->flatMap(function ($role) {
+                return $role->permissions;
+            })->sort()->values();
+
+            $permissions = $permissions->merge($rolesPermissions);
+        }
+
+        return $permissions->sort()->values();
+        */
     }
 
 }

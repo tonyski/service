@@ -5,6 +5,7 @@ namespace Modules\Permission\Database\Seeders\Init;
 use Illuminate\Database\Seeder;
 use Modules\Permission\Entities\Role;
 use Modules\Permission\Entities\Permission;
+use Modules\Permission\Entities\PermissionType;
 
 class RoleHasPermissionTableInitSeeder extends Seeder
 {
@@ -12,18 +13,18 @@ class RoleHasPermissionTableInitSeeder extends Seeder
     {
         collect($this->getData())->each(function ($item) {
 
-//            超管不需要分配权限，默认拥有所有权限
-//            if (is_string($item['permission'])) {
-//                if ($item['permission'] === 'all') {
-//                    $role = Role::findByName($item['role'], Role::GUARD_ADMIN);
-//                    $permissions = Permission::where('guard_name', Role::GUARD_ADMIN)->get();
-//                    $role->syncPermissions($permissions);
-//                }
-//            }
+            //超管权限
+            if (is_string($item['permission'])) {
+                if ($item['permission'] === 'all') {
+                    $role = Role::findByName($item['role'], PermissionType::$GUARD_ADMIN);
+                    $permissions = Permission::where('guard_name', PermissionType::$GUARD_ADMIN)->get();
+                    $role->syncPermissions($permissions);
+                }
+            }
 
             if (is_array($item['permission'])) {
-                $role = Role::findByName($item['role'], Role::GUARD_ADMIN);
-                $permissions = Permission::where('guard_name', Role::GUARD_ADMIN)
+                $role = Role::findByName($item['role'], PermissionType::$GUARD_ADMIN);
+                $permissions = Permission::where('guard_name', PermissionType::$GUARD_ADMIN)
                     ->whereIn('name', $item['permission'])
                     ->get();
                 $role->syncPermissions($permissions);
@@ -33,7 +34,7 @@ class RoleHasPermissionTableInitSeeder extends Seeder
 
     private function getData()
     {
-        return $this->getDataFromFile(Role::GUARD_ADMIN);
+        return $this->getDataFromFile(PermissionType::$GUARD_ADMIN);
     }
 
     private function getDataFromFile($guardName)

@@ -2,7 +2,20 @@
   {
     "menu": "menu",
     "route": [
-      "home"
+      "test"
+    ]
+  },
+  {
+    "menu": "menu.menu",
+    "route": [
+      "test",
+      "test2"
+    ]
+  },
+  {
+    "menu": "menu.menu.menu",
+    "route": [
+      "test"
     ]
   }
 ]

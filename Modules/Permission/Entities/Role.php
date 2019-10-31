@@ -18,14 +18,11 @@ use Spatie\Permission\Models\Role as SpatieRole;
 use Modules\Permission\Contracts\Role as ContractsRole;
 use Modules\Permission\Entities\Traits\HasPermissions;
 use Modules\Permission\Entities\Traits\RefreshesPermissionCache;
+use Modules\Base\Support\Locale\LocaleTrait;
 
 class Role extends SpatieRole implements ContractsRole
 {
-    use HasPermissions;
-    use RefreshesPermissionCache;
-
-    const GUARD_ADMIN = 'admin';      // 使用的 guard
-    const GUARD_CUSTOMER = 'customer';// 使用的 guard
+    use HasPermissions, RefreshesPermissionCache, LocaleTrait;
 
     protected $primaryKey = 'uuid';
 

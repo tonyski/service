@@ -5,6 +5,7 @@ namespace Modules\Permission\Database\Seeders\Init;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Modules\Permission\Entities\Role;
+use Modules\Permission\Entities\PermissionType;
 
 class RoleTableInitSeeder extends Seeder
 {
@@ -12,7 +13,7 @@ class RoleTableInitSeeder extends Seeder
     {
         collect($this->getData())->each(function ($item) {
             Role::firstOrCreate(
-                ['name' => $item['name'], 'guard_name' => Role::GUARD_ADMIN],
+                ['name' => $item['name'], 'guard_name' => PermissionType::$GUARD_ADMIN],
                 $item
             );
         });
@@ -20,7 +21,7 @@ class RoleTableInitSeeder extends Seeder
 
     private function getData()
     {
-        return $this->getDataFromFile(Role::GUARD_ADMIN);
+        return $this->getDataFromFile(PermissionType::$GUARD_ADMIN);
     }
 
     private function getDataFromFile($guardName)

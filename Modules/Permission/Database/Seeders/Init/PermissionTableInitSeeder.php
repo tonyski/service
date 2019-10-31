@@ -5,6 +5,7 @@ namespace Modules\Permission\Database\Seeders\Init;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Modules\Permission\Entities\Permission;
+use Modules\Permission\Entities\PermissionType;
 
 class PermissionTableInitSeeder extends Seeder
 {
@@ -12,7 +13,7 @@ class PermissionTableInitSeeder extends Seeder
     {
         collect($this->getData())->each(function ($item) {
             Permission::firstOrCreate(
-                ['name' => $item['name'],'guard_name' => Permission::GUARD_ADMIN],
+                ['name' => $item['name'],'guard_name' => PermissionType::$GUARD_ADMIN],
                 $item
             );
         });
@@ -20,9 +21,9 @@ class PermissionTableInitSeeder extends Seeder
 
     private function getData()
     {
-        $adminFeature = $this->getDataFromFile(Permission::GUARD_ADMIN, Permission::PERMISSION_FEATURE, 'feature');
-        $adminRoute = $this->getDataFromFile(Permission::GUARD_ADMIN, Permission::PERMISSION_ROUTE, 'route');
-        $adminIndex = $this->getDataFromFile(Permission::GUARD_ADMIN, Permission::PERMISSION_INDEX, 'index');
+        $adminFeature = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, PermissionType::$PERMISSION_FEATURE, 'feature');
+        $adminRoute = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, PermissionType::$PERMISSION_ROUTE, 'route');
+        $adminIndex = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, PermissionType::$PERMISSION_INDEX, 'index');
 
         return array_merge($adminFeature, $adminRoute, $adminIndex);
     }

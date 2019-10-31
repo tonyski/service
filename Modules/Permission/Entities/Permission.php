@@ -17,17 +17,12 @@ use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Modules\Permission\Contracts\Permission as ContractsPermission;
 use Modules\Permission\Entities\Traits\HasRoles;
 use Modules\Permission\Entities\Traits\RefreshesPermissionCache;
+use Modules\Route\Entities\Traits\PermissionToRoute;
+use Modules\Base\Support\Locale\LocaleTrait;
 
 class Permission extends SpatiePermission implements ContractsPermission
 {
-    use HasRoles;
-    use RefreshesPermissionCache;
-
-    const GUARD_ADMIN = 'admin';      // 使用的 guard
-    const GUARD_CUSTOMER = 'customer';// 使用的 guard
-    const PERMISSION_FEATURE = 1;     // 功能权限
-    const PERMISSION_ROUTE = 2;       // 访问入口权限
-    const PERMISSION_INDEX = 3;       // 访问首页权限
+    use HasRoles, RefreshesPermissionCache, PermissionToRoute, LocaleTrait;
 
     protected $primaryKey = 'uuid';
 
@@ -73,7 +68,7 @@ class Permission extends SpatiePermission implements ContractsPermission
         $guardName = $guardName ?? Guard::getDefaultName(static::class);
         $permission = static::getPermissions(['uuid' => $uuid, 'guard_name' => $guardName])->first();
 
-        if (! $permission) {
+        if (!$permission) {
             throw PermissionDoesNotExist::withId($uuid, $guardName);
         }
 

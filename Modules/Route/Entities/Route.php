@@ -4,11 +4,11 @@ namespace Modules\Route\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Modules\Base\Support\Locale\LocaleTrait;
 
 class Route extends Model
 {
-    const GUARD_ADMIN = 'admin';      // 使用的 guard
-    const GUARD_CUSTOMER = 'customer';// 使用的 guard
+    use LocaleTrait;
 
     protected $primaryKey = 'uuid';
 
@@ -32,7 +32,7 @@ class Route extends Model
             'route_to_menus',
             'route_uuid',
             'route_menu_uuid'
-        )->withPivot('sort');
+        )->withPivot('sort')->as('route_menu');
     }
 
     /**
@@ -40,6 +40,6 @@ class Route extends Model
      */
     public function permission()
     {
-        return $this->belongsTo('Modules\Permission\Entities\Permission','uuid','uuid');
+        return $this->belongsTo('Modules\Permission\Entities\Permission', 'uuid', 'uuid');
     }
 }

@@ -10,7 +10,31 @@ use Spatie\Permission\Contracts\Role;
 
 trait HasRoles
 {
-    use SpatieHasRoles;
+    use SpatieHasRoles, HasPermissions {
+        HasPermissions::bootHasPermissions insteadof SpatieHasRoles;
+        HasPermissions::getPermissionClass insteadof SpatieHasRoles;
+        HasPermissions::permissions insteadof SpatieHasRoles;
+        HasPermissions::scopePermission insteadof SpatieHasRoles;
+        HasPermissions::convertToPermissionModels insteadof SpatieHasRoles;
+        HasPermissions::hasPermissionTo insteadof SpatieHasRoles;
+        HasPermissions::hasUncachedPermissionTo insteadof SpatieHasRoles;
+        HasPermissions::checkPermissionTo insteadof SpatieHasRoles;
+        HasPermissions::hasAnyPermission insteadof SpatieHasRoles;
+        HasPermissions::hasAllPermissions insteadof SpatieHasRoles;
+        HasPermissions::hasPermissionViaRole insteadof SpatieHasRoles;
+        HasPermissions::hasDirectPermission insteadof SpatieHasRoles;
+        HasPermissions::getPermissionsViaRoles insteadof SpatieHasRoles;
+        HasPermissions::getAllPermissions insteadof SpatieHasRoles;
+        HasPermissions::givePermissionTo insteadof SpatieHasRoles;
+        HasPermissions::syncPermissions insteadof SpatieHasRoles;
+        HasPermissions::revokePermissionTo insteadof SpatieHasRoles;
+        HasPermissions::getPermissionNames insteadof SpatieHasRoles;
+        HasPermissions::getStoredPermission insteadof SpatieHasRoles;
+        HasPermissions::ensureModelSharesGuard insteadof SpatieHasRoles;
+        HasPermissions::getGuardNames insteadof SpatieHasRoles;
+        HasPermissions::getDefaultGuardName insteadof SpatieHasRoles;
+        HasPermissions::forgetCachedPermissions insteadof SpatieHasRoles;
+    }
 
     /**
      * A model may have multiple roles.
@@ -32,7 +56,7 @@ trait HasRoles
             $roles = $roles->all();
         }
 
-        if (! is_array($roles)) {
+        if (!is_array($roles)) {
             $roles = [$roles];
         }
 
@@ -51,7 +75,7 @@ trait HasRoles
         return $query->whereHas('roles', function ($query) use ($roles) {
             $query->where(function ($query) use ($roles) {
                 foreach ($roles as $role) {
-                    $query->orWhere(config('permission.table_names.roles').'.uuid', $role->uuid);
+                    $query->orWhere(config('permission.table_names.roles') . '.uuid', $role->uuid);
                 }
             });
         });

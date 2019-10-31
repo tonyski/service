@@ -3,7 +3,7 @@
     "alias": "authcustomer",
     "description": "前台用户认证",
     "keywords": [],
-    "order": 0,
+    "order": 1,
     "providers": [
         "Modules\\AuthCustomer\\Providers\\AuthCustomerServiceProvider"
     ],

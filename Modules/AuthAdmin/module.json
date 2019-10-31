@@ -3,7 +3,7 @@
     "alias": "authadmin",
     "description": "认证管理员",
     "keywords": [],
-    "order": 0,
+    "order": 3,
     "providers": [
         "Modules\\AuthAdmin\\Providers\\AuthAdminServiceProvider"
     ],

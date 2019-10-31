@@ -3,12 +3,13 @@
 namespace Modules\Route\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Modules\Base\Support\Locale\LocaleTrait;
 
 class RouteMenu extends Model
 {
-    const GUARD_ADMIN = 'admin';      // 使用的 guard
-    const GUARD_CUSTOMER = 'customer';// 使用的 guard
+    use LocaleTrait;
 
     protected $primaryKey = 'uuid';
 
@@ -32,6 +33,54 @@ class RouteMenu extends Model
             'route_to_menus',
             'route_menu_uuid',
             'route_uuid'
-        )->withPivot('sort');
+        )->withPivot('sort')->as('menu_route');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne(RouteMenu::class, 'uuid', 'parent_uuid');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(RouteMenu::class, 'parent_uuid', 'uuid');
+    }
+
+    public static function allMenuTree(): Collection
+    {
+        return RouteMenu::where('parent_uuid', '')->get()->each(function ($item) {
+            $item->menuTree();
+        });
+    }
+
+    public function menuTree()
+    {
+        if ($this->children->count()) {
+            $this->children->each(function ($item) {
+                $item->menuTree();
+            });
+        }
+    }
+
+    public static function allMenuRouteTree(): Collection
+    {
+        $menus = RouteMenu::where('parent_uuid', '')->get();
+        $menus->loadMissing('routes');
+
+        $menus->each(function ($item) {
+            $item->menuRouteTree();
+        });
+
+        return $menus;
+    }
+
+    public function menuRouteTree()
+    {
+        if ($this->children->count()) {
+            $this->children->loadMissing('routes');
+            $this->children->each(function ($item) {
+                $item->menuRouteTree();
+            });
+        }
     }
 }

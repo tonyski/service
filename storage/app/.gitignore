@@ -1,3 +1,4 @@
 *
 !public/
+!modules_statuses.json
 !.gitignore

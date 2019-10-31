@@ -3,7 +3,7 @@
     "alias": "permission",
     "description": "权限管理",
     "keywords": [],
-    "order": 0,
+    "order": 4,
     "providers": [
         "Modules\\Permission\\Providers\\PermissionServiceProvider"
     ],

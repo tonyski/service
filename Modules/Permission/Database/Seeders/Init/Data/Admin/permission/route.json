@@ -10,6 +10,17 @@
         "zh-CN": "入口"
       },
       "comment": "入口权限"
+    },
+    {
+      "uuid": "",
+      "name": "route2",
+      "guard_name": "",
+      "type": "",
+      "locale": {
+        "en-US": "route2",
+        "zh-CN": "入口2"
+      },
+      "comment": "入口权限2"
     }
   ]
 }

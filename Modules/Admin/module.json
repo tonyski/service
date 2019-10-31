@@ -3,7 +3,7 @@
     "alias": "admin",
     "description": "后台管理用户",
     "keywords": [],
-    "order": 0,
+    "order": 2,
     "providers": [
         "Modules\\Admin\\Providers\\AdminServiceProvider"
     ],

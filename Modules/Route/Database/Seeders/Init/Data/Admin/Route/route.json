@@ -10,5 +10,17 @@
       "zh-CN": "测试入口"
     },
     "comment": "测试入口"
+  },
+  {
+    "permission": "route2",
+    "uuid": "",
+    "guard_name": "",
+    "route": "/test2",
+    "name": "test2",
+    "locale": {
+      "en-US": "Test2",
+      "zh-CN": "测试入口2"
+    },
+    "comment": "测试入口2"
   }
 ]
