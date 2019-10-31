@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Exceptions\Auth;
+namespace Modules\Base\Exceptions\Auth;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
-use App\Support\Traits\ResponseTrait;
+use Modules\Base\Support\Response\ResponseTrait;
 
 class UnGuestException extends Exception
 {

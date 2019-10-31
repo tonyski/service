@@ -2,21 +2,13 @@
 
 namespace Modules\Route\Entities;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Modules\Base\Entities\Model;
 use Modules\Base\Support\Locale\LocaleTrait;
 
 class Route extends Model
 {
     use LocaleTrait;
-
-    protected $primaryKey = 'uuid';
-
-    protected $keyType = 'char';
-
-    public $incrementing = false;
-
-    protected $guarded = ['uuid'];
 
     protected $casts = [
         'locale' => 'json',

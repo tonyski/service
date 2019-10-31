@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Traits;
+namespace Modules\Base\Support\Response;
 
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 

@@ -17,5 +17,11 @@
     "route": [
       "test"
     ]
+  },
+  {
+    "menu": "menu1",
+    "route": [
+      "test"
+    ]
   }
 ]

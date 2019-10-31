@@ -1,7 +1,6 @@
 <?php
 
-namespace App\Support\Traits;
-
+namespace Modules\Base\Support\Response;
 
 trait ResponseStatusTrait
 {

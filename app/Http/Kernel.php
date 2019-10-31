@@ -20,7 +20,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \Barryvdh\Cors\HandleCors::class,
-        \App\Http\Middleware\SetLocale::class,
+        \Modules\Base\Http\Middleware\SetLocale::class,
     ];
 
     /**
@@ -53,14 +53,14 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
+        'auth' => \Modules\Base\Http\Middleware\Auth::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'auth.attempt' => \App\Http\Middleware\AuthAttempt::class,
+        'auth.attempt' => \Modules\Base\Http\Middleware\AuthAttempt::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
 //        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'guest' => \App\Http\Middleware\Guest::class,
+        'guest' => \Modules\Base\Http\Middleware\Guest::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
@@ -77,9 +77,9 @@ class Kernel extends HttpKernel
     protected $middlewarePriority = [
         \Illuminate\Session\Middleware\StartSession::class,
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-        \App\Http\Middleware\Authenticate::class,
-        \App\Http\Middleware\AuthAttempt::class,
-        \App\Http\Middleware\Guest::class,
+        \Modules\Base\Http\Middleware\Auth::class,
+        \Modules\Base\Http\Middleware\AuthAttempt::class,
+        \Modules\Base\Http\Middleware\Guest::class,
         \Illuminate\Routing\Middleware\ThrottleRequests::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,

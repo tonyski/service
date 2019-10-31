@@ -11,7 +11,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Support\Traits\ResponseTrait;
+use Modules\Base\Support\Response\ResponseTrait;
 
 class Handler extends ExceptionHandler
 {
