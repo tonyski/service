@@ -65,37 +65,37 @@ trait ModelHasRoute
         $menuToRoute = collect($routeToMenu)->sortBy('sort')->groupBy('route_menu_uuid');
 
         //获取所有侧边栏的所有父级侧边栏
-        $this->getMenuList($menus, $menus);
+        $this->getMenuList($menus);
         //将数据组成树状结构
         return $this->getMenuTree($menus, $menuToRoute, $routes);
     }
 
     /**
-     * @param Collection $list 存放已经查出来的模型集合
-     * @param Collection $menus 需要查询父级模型的模型集合
+     * @param Collection $menus 需要查找其父级分类的集合
      */
-    public function getMenuList(Collection &$list, Collection $menus)
+    public function getMenuList(Collection $menus)
     {
+        // foreach 开始时 已经将集合的元素创建了迭代器，循环运行中添加到集合的元素，不会循环。
         foreach ($menus as $menu) {
-            $this->getParentMenuTree($list, $menu);
+            $this->getParentMenuTree($menus, $menu);
         }
     }
 
     /**
-     * @param Collection $list 存放已经查出来的模型集合
-     * @param RouteMenu $menu 模型对象
+     * @param Collection $menus 已经查出来了的分类的集合
+     * @param RouteMenu $menu   查询此分类的所有父级分类
      */
-    public function getParentMenuTree(Collection &$list, RouteMenu $menu)
+    public function getParentMenuTree(Collection $menus, RouteMenu $menu)
     {
         $parentUuid = $menu->parent_uuid;
 
-        if (!$parentUuid || $list->has($parentUuid)) {
+        if (!$parentUuid || $menus->has($parentUuid)) {
             return;
         }
 
         $parentMenu = RouteMenu::find($parentUuid);
-        $list->put($parentUuid, $parentMenu);
-        $this->getParentMenuTree($list, $parentMenu);
+        $menus->put($parentUuid, $parentMenu);
+        $this->getParentMenuTree($menus, $parentMenu);
     }
 
     public function getMenuTree(Collection $menus, Collection $menuToRoute, Collection $routes)
@@ -115,9 +115,9 @@ trait ModelHasRoute
             ];
         }
 
-        foreach ($menuTree as &$menu) {
-            if ($menu['parent_uuid']) {
-                $menuTree[$menu['parent_uuid']]['menu'][] = $menu;
+        foreach ($menuTree as &$menuNode) {
+            if ($menuNode['parent_uuid']) {
+                $menuTree[$menuNode['parent_uuid']]['menu'][] = &$menuNode;
             }
         }
 
