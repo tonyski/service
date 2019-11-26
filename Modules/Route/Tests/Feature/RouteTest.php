@@ -2,19 +2,15 @@
 
 namespace Modules\Route\Tests\Feature;
 
-use Modules\Admin\Entities\Admin;
-use Tests\TestCase;
+use Modules\Base\Tests\AdminTestCase;
 
-class RouteTest extends TestCase
+class RouteTest extends AdminTestCase
 {
     private static $fetchMenu = 'route/admin/fetchMenu';
 
     public function testFetchMenu()
     {
-        $user = Admin::where('name', 'fly.fei')->first();
-
-        $this->actingAs($user, 'admin')
-            ->getJson(self::$fetchMenu)
+        $this->getJson(self::$fetchMenu)
             ->assertSuccessful()
             ->assertJsonStructure(['data' => ['index', 'menu']]);
     }

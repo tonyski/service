@@ -1,26 +1,15 @@
 {
-  "入口组": [
+  "权限管理": [
     {
       "uuid": "",
-      "name": "route",
+      "name": "permission",
       "guard_name": "",
       "type": "",
       "locale": {
-        "en-US": "route",
-        "zh-CN": "入口"
+        "en-US": "AccessRightsManagement",
+        "zh-CN": "访问权限管理"
       },
-      "comment": "入口权限"
-    },
-    {
-      "uuid": "",
-      "name": "route2",
-      "guard_name": "",
-      "type": "",
-      "locale": {
-        "en-US": "route2",
-        "zh-CN": "入口2"
-      },
-      "comment": "入口权限2"
+      "comment": "此权限应该仅赋值给超管，包含角色列表"
     }
   ]
 }

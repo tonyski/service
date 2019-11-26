@@ -1,27 +1,8 @@
 [
   {
-    "menu": "menu",
+    "menu": "system",
     "route": [
-      "test"
-    ]
-  },
-  {
-    "menu": "menu.menu",
-    "route": [
-      "test",
-      "test2"
-    ]
-  },
-  {
-    "menu": "menu.menu.menu",
-    "route": [
-      "test"
-    ]
-  },
-  {
-    "menu": "menu1",
-    "route": [
-      "test"
+      "permission"
     ]
   }
 ]

@@ -6,7 +6,7 @@
       "guard_name": "",
       "type": "",
       "locale": {
-        "en-US": "feature",
+        "en-US": "Feature",
         "zh-CN": "功能"
       },
       "comment": "功能权限"

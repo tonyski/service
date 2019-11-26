@@ -48,6 +48,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::prefix('permission')
             ->middleware(['api','auth:admin'])
             ->namespace($this->moduleNamespace)
+            ->name('permission.')
             ->group(__DIR__ . '/../Routes/api.php');
     }
 }

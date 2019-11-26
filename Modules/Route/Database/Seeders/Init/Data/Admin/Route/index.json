@@ -6,9 +6,9 @@
     "route": "/home",
     "name": "home",
     "locale": {
-      "en-US": "default home page",
-      "zh-CN": "默认首页"
+      "en-US": "Home",
+      "zh-CN": "首页"
     },
-    "comment": "默认首页入口"
+    "comment": "首页入口"
   }
 ]

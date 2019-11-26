@@ -1,26 +1,14 @@
 [
   {
-    "permission": "route",
+    "permission": "permission",
     "uuid": "",
     "guard_name": "",
-    "route": "/test",
-    "name": "test",
+    "route": "/permission",
+    "name": "permission",
     "locale": {
-      "en-US": "Test",
-      "zh-CN": "测试入口"
+      "en-US": "PermissionManage",
+      "zh-CN": "权限管理"
     },
-    "comment": "测试入口"
-  },
-  {
-    "permission": "route2",
-    "uuid": "",
-    "guard_name": "",
-    "route": "/test2",
-    "name": "test2",
-    "locale": {
-      "en-US": "Test2",
-      "zh-CN": "测试入口2"
-    },
-    "comment": "测试入口2"
+    "comment": "权限管理入口应该仅超管拥有"
   }
 ]
