@@ -4,24 +4,15 @@ namespace Modules\Permission\Http\Controllers;
 
 use Modules\Permission\Http\Requests\RolesRequest;
 use Modules\Permission\Entities\Role;
+use Modules\Base\Contracts\ListServiceInterface;
 
 class RoleController extends Controller
 {
-    public function index(RolesRequest $request)
+    public function index(RolesRequest $request, ListServiceInterface $listService)
     {
-        $limit = $request->input('limit');
-        $guardName = $request->input('filter.guard_name');
-        $sortName = $request->input('sort.name');
-
-        $roleQuery = Role::query();
-        if ($guardName) {
-            $roleQuery->where('guard_name', $guardName);
-        }
-        if ($sortName) {
-            $roleQuery->orderBy('name', $sortName);
-        }
-
-        $rolePaginate = $roleQuery->paginate($limit)->toArray();
+        $model = new Role();
+        $paginate = $listService->getList($model, $request);
+        $rolePaginate = $paginate->toArray();
 
         $data = [];
         $data['roles'] = $rolePaginate['data'];

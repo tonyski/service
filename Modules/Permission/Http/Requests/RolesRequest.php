@@ -2,20 +2,10 @@
 
 namespace Modules\Permission\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Modules\Base\Http\Requests\ListRequest;
 
-class RolesRequest extends FormRequest
+class RolesRequest extends ListRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      * 支持的请求参数 ?page=1&limit=20&filter[guard_name]=admin&sort[name]=desc
@@ -24,13 +14,22 @@ class RolesRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'page' => 'numeric|min:1',
-            'limit' => 'numeric|min:1',
-            'filter' => 'array',
-            'filter.guard_name' => 'in:admin,customer,supplier',
-            'sort' => 'array',
-            'sort.name' => 'in:asc,desc',
-        ];
+        return array_merge(
+            parent::rules(),
+            [
+                'filter.guard_name' => 'in:admin,customer,supplier',
+                'sort.name' => 'in:asc,desc'
+            ]
+        );
+    }
+
+    public function allowFilter(): array
+    {
+        return ['guard_name','name'];
+    }
+
+    public function allowSort(): array
+    {
+        return ['name'];
     }
 }
