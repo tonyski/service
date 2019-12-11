@@ -9,6 +9,6 @@
       "en-US": "PermissionManage",
       "zh-CN": "权限管理"
     },
-    "comment": "权限管理入口应该仅超管拥有"
+    "comment": "权限管理入口"
   }
 ]

@@ -9,6 +9,5 @@ return [
     |
     */
 
-    'not_found'   => 'api not exist',
-    'no_permission'   => 'no permission',
+    'exception'   => '异常',
 ];

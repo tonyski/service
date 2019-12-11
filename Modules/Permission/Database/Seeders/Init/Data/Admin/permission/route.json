@@ -9,7 +9,7 @@
         "en-US": "AccessRightsManagement",
         "zh-CN": "访问权限管理"
       },
-      "comment": "此权限应该仅赋值给超管，包含角色列表"
+      "comment": "此权限可以访问权限管理，包含角色列表"
     }
   ]
 }

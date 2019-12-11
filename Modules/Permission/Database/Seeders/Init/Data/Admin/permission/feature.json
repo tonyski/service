@@ -1,15 +1,15 @@
 {
-  "功能组": [
+  "权限管理": [
     {
       "uuid": "",
-      "name": "feature",
+      "name": "permission.action",
       "guard_name": "",
       "type": "",
       "locale": {
-        "en-US": "Feature",
-        "zh-CN": "功能"
+        "en-US": "OperationRightsManagement",
+        "zh-CN": "操作权限管理"
       },
-      "comment": "功能权限"
+      "comment": "此权限可以操作权限的设置，包含添加角色，更新角色，删除角色"
     }
   ]
 }

@@ -23,5 +23,7 @@ class BaseServiceProvider extends ServiceProvider
                 SeedInitCommand::class,
             ]);
         }
+
+        $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'base');
     }
 }

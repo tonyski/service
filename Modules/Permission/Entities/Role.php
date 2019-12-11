@@ -10,14 +10,13 @@ namespace Modules\Permission\Entities;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Spatie\Permission\Guard;
 use Spatie\Permission\Contracts\Role as RoleContract;
-use Spatie\Permission\Exceptions\RoleDoesNotExist;
 use Spatie\Permission\Exceptions\GuardDoesNotMatch;
 use Spatie\Permission\Models\Role as SpatieRole;
 use Modules\Permission\Contracts\Role as ContractsRole;
 use Modules\Permission\Entities\Traits\HasPermissions;
 use Modules\Permission\Entities\Traits\RefreshesPermissionCache;
+use Modules\Permission\Exceptions\RoleDoesNotExist;
 use Modules\Base\Support\Locale\LocaleTrait;
 
 class Role extends SpatieRole implements ContractsRole
@@ -30,7 +29,7 @@ class Role extends SpatieRole implements ContractsRole
 
     public $incrementing = false;
 
-    protected $guarded = ['uuid'];
+    protected $guarded = [];
 
     protected $casts = [
         'locale' => 'json',
@@ -63,14 +62,12 @@ class Role extends SpatieRole implements ContractsRole
         )->withPivot('is_default');
     }
 
-    public static function findByUuId($uuid, $guardName = null): RoleContract
+    public static function findByUuId($uuid): RoleContract
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
-
-        $role = static::where('uuid', $uuid)->where('guard_name', $guardName)->first();
+        $role = static::where('uuid', $uuid)->first();
 
         if (!$role) {
-            throw RoleDoesNotExist::withId($uuid);
+            throw RoleDoesNotExist::withUuid($uuid);
         }
 
         return $role;

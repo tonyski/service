@@ -10,7 +10,6 @@ namespace Modules\Permission\Entities;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Spatie\Permission\Guard;
 use Spatie\Permission\Contracts\Permission as PermissionContract;
 use Spatie\Permission\Models\Permission as SpatiePermission;
 use Spatie\Permission\Exceptions\PermissionDoesNotExist;
@@ -30,7 +29,7 @@ class Permission extends SpatiePermission implements ContractsPermission
 
     public $incrementing = false;
 
-    protected $guarded = ['uuid'];
+    protected $guarded = [];
 
     protected $casts = [
         'locale' => 'json',
@@ -63,13 +62,12 @@ class Permission extends SpatiePermission implements ContractsPermission
         )->withPivot('expires_at');
     }
 
-    public static function findByUuId($uuid, $guardName = null): PermissionContract
+    public static function findByUuId($uuid): PermissionContract
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
-        $permission = static::getPermissions(['uuid' => $uuid, 'guard_name' => $guardName])->first();
+        $permission = static::getPermissions(['uuid' => $uuid])->first();
 
         if (!$permission) {
-            throw PermissionDoesNotExist::withId($uuid, $guardName);
+            throw PermissionDoesNotExist::withId($uuid);
         }
 
         return $permission;

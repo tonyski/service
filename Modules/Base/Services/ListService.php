@@ -23,9 +23,9 @@ class ListService implements ListServiceInterface
      */
     public function getList(Model $model, ListRequest $request): LengthAwarePaginator
     {
-        $limit = $request->input('limit') ? (int)$request->input('limit') : null;
-        $filter = $request->input('filter') ?: [];
-        $sort = $request->input('sort') ?: [];
+        $limit = $request->query('limit') ? (int)$request->query('limit') : null;
+        $filter = $request->query('filter') ?: [];
+        $sort = $request->query('sort') ?: [];
         $allowFilter = $request->allowFilter();
         $allowSort = $request->allowSort();
 

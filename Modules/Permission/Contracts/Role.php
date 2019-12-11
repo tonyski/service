@@ -24,11 +24,10 @@ interface Role extends SpatieRole
      * Find a role by its uuid and guard name.
      *
      * @param string $uuid
-     * @param string|null $guardName
      *
      * @return Role
      *
      * @throws \Spatie\Permission\Exceptions\RoleDoesNotExist
      */
-    public static function findByUuId($uuid, $guardName): SpatieRole;
+    public static function findByUuId($uuid): SpatieRole;
 }

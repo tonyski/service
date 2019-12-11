@@ -25,12 +25,11 @@ interface Permission extends SpatiePermission
      * Find a permission by its uuid.
      *
      * @param string $uuid
-     * @param string|null $guardName
      *
      * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
      *
      * @return Permission
      */
-    public static function findByUuid($uuid, $guardName): SpatiePermission;
+    public static function findByUuid($uuid): SpatiePermission;
 
 }

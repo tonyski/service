@@ -23,11 +23,6 @@ trait ResponseTrait
     |
     */
 
-    /**
-     * @param int $code
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function success($code = FoundationResponse::HTTP_OK)
     {
         return response()->json([
@@ -36,14 +31,9 @@ trait ResponseTrait
         ], $code);
     }
 
-    /**
-     * @param string $message
-     * @param int $code
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function successWithMessage($message, $code = FoundationResponse::HTTP_OK)
+    public function successWithMessage($message = '', $code = FoundationResponse::HTTP_OK)
     {
+        $message = $message ?: __('base::base.successDo');
         return response()->json([
             'status' => self::$successStatus,
             'code' => $code,
@@ -51,12 +41,6 @@ trait ResponseTrait
         ], $code);
     }
 
-    /**
-     * @param array $data
-     * @param int $code
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function successWithData($data, $code = FoundationResponse::HTTP_OK)
     {
         return response()->json([
@@ -66,11 +50,17 @@ trait ResponseTrait
         ], $code);
     }
 
-    /**
-     * @param int $code
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    public function successWithDataAndMessage($data, $message = '', $code = FoundationResponse::HTTP_OK)
+    {
+        $message = $message ?: __('base::base.successDo');
+        return response()->json([
+            'status' => self::$successStatus,
+            'code' => $code,
+            'message' => $message,
+            'data' => $data,
+        ], $code);
+    }
+
     public function failed($code = FoundationResponse::HTTP_BAD_REQUEST)
     {
         return response()->json([
@@ -79,12 +69,6 @@ trait ResponseTrait
         ], $code);
     }
 
-    /**
-     * @param        $message
-     * @param int $code
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function failedWithMessage($message, $code = FoundationResponse::HTTP_BAD_REQUEST)
     {
         return response()->json([
@@ -94,13 +78,6 @@ trait ResponseTrait
         ], $code);
     }
 
-    /**
-     * @param array $errors
-     * @param string $message
-     * @param int $code
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function failedWithMessageAndErrors($errors, $message, $code = FoundationResponse::HTTP_BAD_REQUEST)
     {
         return response()->json([
@@ -111,15 +88,21 @@ trait ResponseTrait
         ], $code);
     }
 
-    public function createSuccess($data = [])
+    public function createSuccess($data = [], $message = '', $code = FoundationResponse::HTTP_CREATED)
     {
-        if (is_array($data) && sizeof($data)) {
-            return $this->successWithData($data, FoundationResponse::HTTP_CREATED);
-        } else if (is_string($data)) {
-            return $this->successWithMessage($data, FoundationResponse::HTTP_CREATED);
-        } else {
-            return $this->success(FoundationResponse::HTTP_CREATED);
-        }
+        $message = $message ?: __('base::base.successCreate');
+        return $this->successWithDataAndMessage($data, $message, $code);
     }
 
+    public function updateSuccess($data = [], $message = '')
+    {
+        $message = $message ?: __('base::base.successUpdate');
+        return $this->successWithDataAndMessage($data, $message);
+    }
+
+    public function deleteSuccess($message = '')
+    {
+        $message = $message ?: __('base::base.successDelete');
+        return $this->successWithMessage($message);
+    }
 }

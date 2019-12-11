@@ -17,19 +17,22 @@ class RolesRequest extends ListRequest
         return array_merge(
             parent::rules(),
             [
-                'filter.guard_name' => 'in:admin,customer,supplier',
-                'sort.name' => 'in:asc,desc'
+                'filter.guard_name' => 'sometimes|in:admin,customer,supplier',
+                'filter.name' => 'sometimes|regex:/^[a-z]+(\.[a-z]+)*$/',
+                'sort.name' => 'sometimes|in:asc,desc',
+                'sort.created_at' => 'sometimes|in:asc,desc',
+                'sort.updated_at' => 'sometimes|in:asc,desc'
             ]
         );
     }
 
     public function allowFilter(): array
     {
-        return ['guard_name','name'];
+        return ['guard_name', 'name'];
     }
 
     public function allowSort(): array
     {
-        return ['name'];
+        return ['name','created_at','updated_at'];
     }
 }

@@ -10,4 +10,5 @@ return [
     */
 
     'not_found'   => 'api不存在',
+    'no_permission'   => '权限不足',
 ];

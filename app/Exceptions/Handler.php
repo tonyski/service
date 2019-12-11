@@ -11,6 +11,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Symfony\Component\HttpFoundation\Response as FoundationResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Modules\Base\Support\Response\ResponseTrait;
 
 class Handler extends ExceptionHandler
@@ -39,7 +40,9 @@ class Handler extends ExceptionHandler
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e, $request);
         } elseif ($e instanceof NotFoundHttpException) {
-            return $this->failedWithMessage(__('error.not_found'),$e->getStatusCode());
+            return $this->failedWithMessage(__('error.not_found'), $e->getStatusCode());
+        } elseif ($e instanceof UnauthorizedException) {
+            return $this->failedWithMessage(__('error.no_permission') . ':' . $e->getMessage(), $e->getStatusCode());
         }
 
         return $request->expectsJson()
@@ -51,19 +54,19 @@ class Handler extends ExceptionHandler
     {
         return $this->failedWithMessageAndErrors(
             $this->convertExceptionToArray($e),
-            __($e->getMessage()),
+            $e->getMessage(),
             $this->isHttpException($e) ? $e->getStatusCode() : FoundationResponse::HTTP_INTERNAL_SERVER_ERROR
         );
     }
 
     protected function invalidJson($request, ValidationException $exception)
     {
-        return $this->failedWithMessageAndErrors($exception->errors(),__('validation.invalid_message'),$exception->status);
+        return $this->failedWithMessageAndErrors($exception->errors(), __('validation.invalid_message'), $exception->status);
     }
 
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        return $this->failedWithMessage(__('auth.unauthenticated'),FoundationResponse::HTTP_UNAUTHORIZED);
+        return $this->failedWithMessage(__('auth.unauthenticated'), FoundationResponse::HTTP_UNAUTHORIZED);
     }
 
 }
