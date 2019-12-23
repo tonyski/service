@@ -1,13 +1,14 @@
 {
-  "首页组": [
+  "home": [
     {
       "uuid": "",
-      "name": "home",
+      "name": "home.default",
       "guard_name": "",
       "type": "",
+      "group": "",
       "locale": {
-        "en-US": "Home",
-        "zh-CN": "首页"
+        "en-US": "DefaultHome",
+        "zh-CN": "默认首页"
       },
       "comment": "首页权限"
     }

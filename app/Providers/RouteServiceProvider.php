@@ -26,6 +26,7 @@ class RouteServiceProvider extends ServiceProvider
         //
         Route::pattern('id', '[0-9]+');
         Route::pattern('uuid', '[0-9a-f]{32}');
+        Route::pattern('guard', 'admin|customer');
 
         parent::boot();
     }

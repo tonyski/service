@@ -5,9 +5,11 @@ namespace Modules\Permission\Http\Controllers;
 use Illuminate\Support\Str;
 use Modules\Base\Contracts\ListServiceInterface;
 use Modules\Permission\Entities\Role;
+use Modules\Permission\Entities\Permission;
 use Modules\Permission\Http\Requests\RolesRequest;
 use Modules\Permission\Http\Requests\CreateRoleRequest;
 use Modules\Permission\Http\Requests\EditRoleRequest;
+use Modules\Permission\Http\Requests\syncRolePermissionsRequest;
 
 class RoleController extends Controller
 {
@@ -66,4 +68,23 @@ class RoleController extends Controller
         }
         return $this->failed();
     }
+
+    public function permissions($uuid)
+    {
+        $role = Role::findByUuId($uuid);
+        return $this->successWithData(['permissions' => $role->permissions]);
+    }
+
+    public function syncPermissions(syncRolePermissionsRequest $request, $uuid)
+    {
+        $role = Role::findByUuId($uuid);
+
+        if (!$role->is_system) {
+            $role->permissions()->sync($request->input('permissions'));
+            return $this->successWithMessage();
+        }
+
+        return $this->failed();
+    }
+
 }

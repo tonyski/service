@@ -21,6 +21,7 @@ class CreatePermissionTables extends Migration
             $table->string('name')->comment('权限名，唯一');
             $table->string('guard_name');
             $table->unsignedTinyInteger('type')->comment('权限的类型，1，功能权限，2，入口权限，3首页入口权限')->default(1);
+            $table->string('group')->comment('对权限分组');
             $table->json('locale')->nullable()->default(null)->comment('本地化翻译样例，{"en-US":"Adding user privileges","zh-CN":"添加用户权限"}');
             $table->string('comment')->comment('备注信息')->default('');
             $table->timestamps();

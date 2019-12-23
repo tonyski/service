@@ -1,6 +1,6 @@
 [
   {
-    "permission": "home",
+    "permission": "home.default",
     "uuid": "",
     "guard_name": "",
     "route": "/home",

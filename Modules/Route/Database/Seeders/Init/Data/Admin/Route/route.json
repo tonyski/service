@@ -1,6 +1,6 @@
 [
   {
-    "permission": "permission",
+    "permission": "permission.view",
     "uuid": "",
     "guard_name": "",
     "route": "/permission",

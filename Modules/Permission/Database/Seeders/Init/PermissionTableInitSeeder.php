@@ -13,7 +13,7 @@ class PermissionTableInitSeeder extends Seeder
     {
         collect($this->getData())->each(function ($item) {
             Permission::firstOrCreate(
-                ['name' => $item['name'],'guard_name' => PermissionType::$GUARD_ADMIN],
+                ['name' => $item['name'], 'guard_name' => PermissionType::$GUARD_ADMIN],
                 $item
             );
         });
@@ -33,11 +33,12 @@ class PermissionTableInitSeeder extends Seeder
         $list = [];
         $group = json_decode(file_get_contents(__DIR__ . '/Data/' . ucfirst($guardName) . '/permission/' . $permissionName . '.json'), true);
 
-        array_walk($group, function ($permissions) use (&$list, $guardName, $permissionType) {
-            array_walk($permissions, function ($permission) use (&$list, $guardName, $permissionType) {
+        array_walk($group, function ($permissions, $key) use (&$list, $guardName, $permissionType) {
+            array_walk($permissions, function ($permission) use (&$list, $guardName, $permissionType, $key) {
                 $permission['uuid'] = Str::uuid()->getHex();
                 $permission['guard_name'] = $guardName;
                 $permission['type'] = $permissionType;
+                $permission['group'] = $key;
 
                 $list[] = $permission;
             });

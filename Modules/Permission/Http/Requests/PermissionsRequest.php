@@ -4,7 +4,7 @@ namespace Modules\Permission\Http\Requests;
 
 use Modules\Base\Http\Requests\ListRequest;
 
-class RolesRequest extends ListRequest
+class PermissionsRequest extends ListRequest
 {
     /**
      * @return array
@@ -15,6 +15,7 @@ class RolesRequest extends ListRequest
             parent::rules(),
             [
                 'filter.guard_name' => 'sometimes|in:admin,customer,supplier',
+                'filter.type' => 'sometimes|in:1,2,3',
                 'filter.name' => 'sometimes|regex:/^[a-z]+(\.[a-z]+)*$/',
                 'sort.name' => 'sometimes|in:asc,desc',
                 'sort.created_at' => 'sometimes|in:asc,desc',
@@ -25,11 +26,11 @@ class RolesRequest extends ListRequest
 
     public function allowFilter(): array
     {
-        return ['guard_name', 'name'];
+        return ['guard_name', 'name', 'type'];
     }
 
     public function allowSort(): array
     {
-        return ['name','created_at','updated_at'];
+        return ['name', 'created_at', 'updated_at'];
     }
 }

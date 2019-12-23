@@ -47,6 +47,25 @@ class RoleTest extends AdminTestCase
     /**
      * @depends testStoreRole
      */
+    public function testRolePermissions($uuid)
+    {
+        $this->getJson(self::$roleUri . '/' . $uuid . '/permissions')
+            ->assertSuccessful()
+            ->assertJsonStructure(['data' => ['permissions']]);
+    }
+
+    /**
+     * @depends testStoreRole
+     */
+    public function testSycnRolePermissions($uuid)
+    {
+        $this->putJson(self::$roleUri . '/' . $uuid . '/permissions', [])
+            ->assertSuccessful();
+    }
+    
+    /**
+     * @depends testStoreRole
+     */
     public function testDestroyRole($uuid)
     {
         $response = $this->deleteJson(self::$roleUri . '/' . $uuid)
