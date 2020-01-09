@@ -2,7 +2,8 @@
   {
     "menu": "system",
     "route": [
-      "permission"
+      "permission",
+      "route"
     ]
   }
 ]

@@ -12,13 +12,22 @@ class RoleHasPermissionTableInitSeeder extends Seeder
     public function run()
     {
         collect($this->getData())->each(function ($item) {
+            //角色对应的首页权限只能有一个
 
             //超管权限
             if (is_string($item['permission'])) {
                 if ($item['permission'] === 'all') {
                     $role = Role::findByName($item['role'], PermissionType::$GUARD_ADMIN);
-                    $permissions = Permission::where('guard_name', PermissionType::$GUARD_ADMIN)->get();
-                    $role->syncPermissions($permissions);
+
+                    $permissions = Permission::where('guard_name', PermissionType::$GUARD_ADMIN)
+                        ->where('type', '<>', PermissionType::$PERMISSION_INDEX)
+                        ->get()->map->uuid->all();
+                    $index = Permission::where('guard_name', PermissionType::$GUARD_ADMIN)
+                        ->where('name', $item['index'])
+                        ->first();
+                    $permissions[] = $index->uuid;
+
+                    $role->permissions()->sync($permissions);
                 }
             }
 
@@ -26,8 +35,8 @@ class RoleHasPermissionTableInitSeeder extends Seeder
                 $role = Role::findByName($item['role'], PermissionType::$GUARD_ADMIN);
                 $permissions = Permission::where('guard_name', PermissionType::$GUARD_ADMIN)
                     ->whereIn('name', $item['permission'])
-                    ->get();
-                $role->syncPermissions($permissions);
+                    ->get()->map->uuid->all();
+                $role->permissions()->sync($permissions);
             }
         });
     }

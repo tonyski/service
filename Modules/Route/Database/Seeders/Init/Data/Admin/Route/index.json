@@ -3,12 +3,13 @@
     "permission": "home.default",
     "uuid": "",
     "guard_name": "",
+    "type": "",
     "route": "/home",
     "name": "home",
     "locale": {
-      "en-US": "Home",
-      "zh-CN": "首页"
+      "en-US": "DefaultHome",
+      "zh-CN": "默认首页"
     },
-    "comment": "首页入口"
+    "comment": "系统默认的首页入口"
   }
 ]

@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Permission\Http\Requests;
+namespace Modules\Route\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditRoleRequest extends FormRequest
+class CreateMenuRequest extends FormRequest
 {
     public function authorize()
     {
@@ -21,7 +21,8 @@ class EditRoleRequest extends FormRequest
 
         return array_merge([
             'locale' => 'required|array',
-            'name' => 'bail|required|max:255|regex:/^[a-z]+(\.[a-z]+)*$/',// 格式为 aaa     aaa.bbb    aaa.bbb.ccc
+            'name' => 'bail|required|max:255|regex:/^[a-z]+(\.[a-z]+)*$/|unique:route_menus',// 格式为 aaa     aaa.bbb    aaa.bbb.ccc
+            'guard_name' => 'required|in:admin,customer,supplier',
             'comment' => 'max:255',
         ], $localeRule);
     }

@@ -23,10 +23,10 @@ abstract class ListRequest extends FormRequest
     public function rules()
     {
         return [
-            'page' => 'numeric|min:1',
-            'limit' => 'numeric|min:1',
-            'filter' => 'array',
-            'sort' => 'array',
+            'page' => 'sometimes|integer|min:1',
+            'limit' => 'sometimes|integer|min:1',
+            'filter' => 'sometimes|array',
+            'sort' => 'sometimes|array',
         ];
     }
 

@@ -8,7 +8,7 @@ use Nwidart\Modules\Commands\SeedCommand as Command;
 
 class SeedInitCommand extends Command
 {
-    protected $name = 'module:seedinit';
+    protected $name = 'module:seed-init';
 
     protected $description = '初始化数据库的数据,单个模块或者所有的';
 

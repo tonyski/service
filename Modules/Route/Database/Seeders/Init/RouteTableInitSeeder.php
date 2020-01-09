@@ -22,24 +22,25 @@ class RouteTableInitSeeder extends Seeder
 
     private function getData()
     {
+        $indexRoute = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, PermissionType::$PERMISSION_INDEX, 'index');
+        $routeRoute = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, PermissionType::$PERMISSION_ROUTE, 'route');
+
+        return array_merge($indexRoute, $routeRoute);
+    }
+
+    private function getDataFromFile($guardName, $type, $name)
+    {
         $routes = [];
-        $indexRoute = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, 'index');
-        $routeRoute = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, 'route');
+        $lists = json_decode(file_get_contents(__DIR__ . '/Data/' . ucfirst($guardName) . '/Route/' . $name . '.json'), true);
 
-        $lists = array_merge($indexRoute, $routeRoute);
-
-        array_walk($lists, function ($list) use (&$routes) {
+        array_walk($lists, function ($list) use (&$routes, $type) {
             $list['uuid'] = Permission::where(['name' => $list['permission'], 'guard_name' => PermissionType::$GUARD_ADMIN])->first()->uuid;
             $list['guard_name'] = PermissionType::$GUARD_ADMIN;
+            $list['type'] = $type;
 
             $routes[] = Arr::except($list, 'permission');
         });
 
         return $routes;
-    }
-
-    private function getDataFromFile($guardName, $type)
-    {
-        return json_decode(file_get_contents(__DIR__ . '/Data/' . ucfirst($guardName) . '/Route/' . $type . '.json'), true);
     }
 }

@@ -6,12 +6,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('fetchPermission', 'PermissionController@fetchPermission')->name('fetchPermission');
 });
 
-//访问权限管理入口的权限，包括角色列表,权限列表,角色对应的权限
+//访问权限管理的权限，包括角色列表,权限列表,角色对应的权限
 Route::middleware(['permission:permission.view'])->group(function () {
     Route::get('roles', 'RoleController@index')->name('roles.index');
     Route::get('roles/{uuid}/permissions', 'RoleController@permissions')->name('roles.permissions');
     Route::get('permissions', 'PermissionController@index')->name('permissions.index');
-    Route::get('permissions/{guard}/groups', 'PermissionController@groups')->name('permissions.groups');
+    Route::get('groups/permissions', 'PermissionController@groups')->name('groups.permissions');
 });
 
 //操作权限管理

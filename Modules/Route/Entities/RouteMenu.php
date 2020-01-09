@@ -38,9 +38,9 @@ class RouteMenu extends Model
         return $this->hasMany(RouteMenu::class, 'parent_uuid', 'uuid');
     }
 
-    public static function allMenuTree(): Collection
+    public static function allMenuTree($guard): Collection
     {
-        return RouteMenu::where('parent_uuid', '')->get()->each(function ($item) {
+        return RouteMenu::where(['parent_uuid' => '', 'guard_name' => $guard])->get()->each(function ($item) {
             $item->menuTree();
         });
     }
@@ -54,9 +54,9 @@ class RouteMenu extends Model
         }
     }
 
-    public static function allMenuRouteTree(): Collection
+    public static function allMenuRouteTree($guard): Collection
     {
-        $menus = RouteMenu::where('parent_uuid', '')->get();
+        $menus = RouteMenu::where(['parent_uuid' => '', 'guard_name' => $guard])->get();
         $menus->loadMissing('routes');
 
         $menus->each(function ($item) {
@@ -74,5 +74,15 @@ class RouteMenu extends Model
                 $item->menuRouteTree();
             });
         }
+    }
+
+    public function menuRouteTreeDelete()
+    {
+        if ($this->children->count()) {
+            $this->children->each(function ($item) {
+                $item->menuRouteTreeDelete();
+            });
+        }
+        $this->delete();
     }
 }

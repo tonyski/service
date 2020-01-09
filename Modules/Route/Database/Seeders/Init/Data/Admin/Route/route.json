@@ -3,6 +3,7 @@
     "permission": "permission.view",
     "uuid": "",
     "guard_name": "",
+    "type": "",
     "route": "/permission",
     "name": "permission",
     "locale": {
@@ -10,5 +11,18 @@
       "zh-CN": "权限管理"
     },
     "comment": "权限管理入口"
+  },
+  {
+    "permission": "route.view",
+    "uuid": "",
+    "guard_name": "",
+    "type": "",
+    "route": "/route",
+    "name": "route",
+    "locale": {
+      "en-US": "AccessManage",
+      "zh-CN": "入口管理"
+    },
+    "comment": "侧边栏分类入口管理"
   }
 ]

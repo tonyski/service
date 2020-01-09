@@ -5,10 +5,10 @@
     "parent_uuid": "",
     "guard_name": "",
     "name": "system",
-    "sort": "1",
+    "sort": "0",
     "icon": "ios-settings-outline",
     "locale": {
-      "en-US": " SystemSetup",
+      "en-US": "SystemSetup",
       "zh-CN": "系统设置"
     },
     "comment": "系统设置"

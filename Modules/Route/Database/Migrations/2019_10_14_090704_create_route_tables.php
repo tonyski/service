@@ -18,6 +18,7 @@ class CreateRouteTables extends Migration
 
             $table->char('uuid', 32)->primary()->comment('入口的uuid,和权限的permission_uuid 值一样,一个入口就是一个访问权限，uuid一样');
             $table->string('guard_name');
+            $table->unsignedTinyInteger('type')->comment('入口类型，对应权限的类型，2，普通入口，3首页入口')->default(2);
             $table->string('route', 255)->default('')->comment('入口的路由链接，前端的路由');
             $table->string('name', 255)->default('')->comment('入口的标识，唯一,和前端的路由名称一样');
             $table->json('locale')->nullable()->default(null)->comment('国际化，{"en-US":"home","zh-CN":"首页"}');
@@ -52,6 +53,7 @@ class CreateRouteTables extends Migration
             $table->unsignedTinyInteger('sort')->default(0)->comment('入口在分类中的排序');
             $table->timestamp('created_at')->nullable()->useCurrent();
 
+            $table->unique(['route_menu_uuid','route_uuid']);
             $table->foreign('route_uuid')->references('uuid')->on('routes')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('route_menu_uuid')->references('uuid')->on('route_menus')->onDelete('cascade')->onUpdate('cascade');
         });

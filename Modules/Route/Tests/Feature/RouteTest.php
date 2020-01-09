@@ -6,12 +6,16 @@ use Modules\Base\Tests\AdminTestCase;
 
 class RouteTest extends AdminTestCase
 {
-    private static $fetchMenu = 'route/admin/fetchMenu';
+    private static $route = 'route/routes';
 
-    public function testFetchMenu()
+    public function testRoutes()
     {
-        $this->getJson(self::$fetchMenu)
+        $this->getJson(self::$route)
             ->assertSuccessful()
-            ->assertJsonStructure(['data' => ['index', 'menu']]);
+            ->assertJsonStructure(['data' => ['routes']]);
+
+        $this->getJson(self::$route . '?limit=1')
+            ->assertSuccessful()
+            ->assertJsonStructure(['data' => ['routes', 'paginate']]);
     }
 }

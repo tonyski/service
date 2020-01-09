@@ -3,26 +3,30 @@
 namespace Modules\Permission\Http\Controllers;
 
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Modules\Base\Contracts\ListServiceInterface;
 use Modules\Permission\Entities\Role;
-use Modules\Permission\Entities\Permission;
 use Modules\Permission\Http\Requests\RolesRequest;
 use Modules\Permission\Http\Requests\CreateRoleRequest;
 use Modules\Permission\Http\Requests\EditRoleRequest;
-use Modules\Permission\Http\Requests\syncRolePermissionsRequest;
+use Modules\Permission\Http\Requests\SyncRolePermissionsRequest;
 
 class RoleController extends Controller
 {
     public function index(RolesRequest $request, ListServiceInterface $listService)
     {
         $model = new Role();
-        $paginate = $listService->getList($model, $request);
-        $rolePaginate = $paginate->toArray();
-
+        $roles = $listService->getList($model, $request);
         $data = [];
-        $data['roles'] = $rolePaginate['data'];
-        unset($rolePaginate['data']);
-        $data['paginate'] = $rolePaginate;
+
+        if ($roles instanceof LengthAwarePaginator) {
+            $rolePaginate = $roles->toArray();
+            $data['roles'] = $rolePaginate['data'];
+            unset($rolePaginate['data']);
+            $data['paginate'] = $rolePaginate;
+        } else {
+            $data['roles'] = $roles->toArray();
+        }
 
         return $this->successWithData($data);
     }
@@ -75,7 +79,7 @@ class RoleController extends Controller
         return $this->successWithData(['permissions' => $role->permissions]);
     }
 
-    public function syncPermissions(syncRolePermissionsRequest $request, $uuid)
+    public function syncPermissions(SyncRolePermissionsRequest $request, $uuid)
     {
         $role = Role::findByUuId($uuid);
 

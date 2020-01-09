@@ -9,20 +9,21 @@
 namespace Modules\Base\Services;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Modules\Base\Http\Requests\ListRequest;
 use Modules\Base\Contracts\ListServiceInterface;
 
 class ListService implements ListServiceInterface
 {
     /**
-     * 传入一个模型和请求，返回模型分页列表
+     * 传入一个模型和请求，返回模型分页 或者 模型集合 或者一个空数组
+     *
      * @param Model $model
      * @param ListRequest $request
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function getList(Model $model, ListRequest $request): LengthAwarePaginator
+    public function getList(Model $model, ListRequest $request)
     {
+        $page = $request->query('page') ? (int)$request->query('page') : null;
         $limit = $request->query('limit') ? (int)$request->query('limit') : null;
         $filter = $request->query('filter') ?: [];
         $sort = $request->query('sort') ?: [];
@@ -41,6 +42,6 @@ class ListService implements ListServiceInterface
             }
         }
 
-        return $query->paginate($limit);
+        return ($page || $limit) ? $query->paginate($limit) : $query->get();
     }
 }

@@ -2,20 +2,27 @@
 
 namespace Modules\Route\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Modules\Base\Contracts\ListServiceInterface;
+use Modules\Route\Entities\Route;
+use Modules\Route\Http\Requests\RoutesRequest;
 
 class RouteController extends Controller
 {
-    /**
-     * 获取当前登录用户的，首页和侧边栏
-     */
-    public function fetchMenu(Request $request)
+    public function index(RoutesRequest $request, ListServiceInterface $listService)
     {
+        $model = new Route();
+        $routes = $listService->getList($model, $request);
         $data = [];
-        //获取当前登录用户的首页
-        $data['index'] = $request->user()->getRouteIndex();
-        //获取当前登录用户的所有访问入口和侧边栏分类
-        $data['menu'] = $request->user()->getRouteMenu();
+
+        if ($routes instanceof LengthAwarePaginator) {
+            $routePaginate = $routes->toArray();
+            $data['routes'] = $routePaginate['data'];
+            unset($routePaginate['data']);
+            $data['paginate'] = $routePaginate;
+        } else {
+            $data['routes'] = $routes->toArray();
+        }
 
         return $this->successWithData($data);
     }

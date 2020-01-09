@@ -16,8 +16,8 @@ class ModelHasRoleTableInitSeeder extends Seeder
                 $admin = Admin::where('name', $item['admin'])->first();
                 $roles = Role::where('guard_name', PermissionType::$GUARD_ADMIN)
                     ->whereIn('name', $item['role'])
-                    ->get();
-                $admin->syncRoles($roles);
+                    ->get()->map->uuid->all();
+                $admin->roles()->sync($roles);
             }
         });
     }

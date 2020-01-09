@@ -25,19 +25,13 @@ trait ModelHasRoute
             }
         }
 
-        return [
-            'uuid' => $this->indexRoute->uuid,
-            'name' => $this->indexRoute->name,
-            'route' => $this->indexRoute->route,
-            'locale' => $this->indexRoute->getLocale(),
-            'comment' => $this->indexRoute->comment
-        ];
+        return $this->indexRoute;
     }
 
     /**
      * 返回入口权限 和 侧边栏菜单
      */
-    public function getRouteMenu()
+    public function getRouteMenuTree()
     {
         //获取用户的所有访问入口权限
         $permissions = $this->getRoutePermissions();
@@ -83,7 +77,7 @@ trait ModelHasRoute
 
     /**
      * @param Collection $menus 已经查出来了的分类的集合
-     * @param RouteMenu $menu   查询此分类的所有父级分类
+     * @param RouteMenu $menu 查询此分类的所有父级分类
      */
     public function getParentMenuTree(Collection $menus, RouteMenu $menu)
     {
@@ -102,28 +96,25 @@ trait ModelHasRoute
     {
         $menuTree = [];
         foreach ($menus as $menu) {
-            $menuTree[$menu->uuid] = [
-                'uuid' => $menu->uuid,
-                'parent_uuid' => $menu->parent_uuid,
-                'name' => $menu->name,
-                'icon' => $menu->icon,
-                'comment' => $menu->comment,
-                'locale' => $menu->getLocale(),
-                'sort' => $menu->sort,
-                'route' => $this->getRoutes($menu->uuid, $menuToRoute, $routes),
-                'menu' => [],
-            ];
+            $menuTree[$menu->uuid] = array_merge($menu->attributesToArray(), [
+                'node_type' => 'menu',
+                'children' => $this->getRoutes($menu->uuid, $menuToRoute, $routes),
+            ]);
         }
 
         foreach ($menuTree as &$menuNode) {
             if ($menuNode['parent_uuid']) {
-                $menuTree[$menuNode['parent_uuid']]['menu'][] = &$menuNode;
+                $menuTree[$menuNode['parent_uuid']]['children'][] = &$menuNode;
             }
         }
 
-        return collect($menuTree)->filter(function ($menu) {
+        $menuTree = collect($menuTree)->filter(function ($menu) {
             return !$menu['parent_uuid'];
-        })->sortBy('sort')->values();
+        })->values()->toArray();
+
+        $menuTree = $this->treeChildrenSort($menuTree);
+
+        return $menuTree;
     }
 
     public function getRoutes($menuUuid, Collection $menuToRoute, Collection $routes)
@@ -132,17 +123,28 @@ trait ModelHasRoute
         if ($menuToRoute->has($menuUuid)) {
             $menuToRoute->get($menuUuid)->each(function ($menuRoute) use (&$routeList, $routes) {
                 $route = $routes->get($menuRoute['route_uuid']);
-                $routeList[] = [
-                    'uuid' => $route->uuid,
-                    'name' => $route->name,
-                    'route' => $route->route,
-                    'locale' => $route->getLocale(),
-                    'comment' => $route->comment,
-                    'sort' => $menuRoute['sort']
-                ];
+                $routeList[] = array_merge($route->attributesToArray(), ['node_type' => 'route', 'parent_uuid' => $menuRoute['route_menu_uuid'], 'sort' => $menuRoute['sort']]);
             });
         }
 
         return $routeList;
+    }
+
+    /**
+     * 递归排序数组
+     *
+     * @param  array $treeArr
+     * @return array
+     */
+    public function treeChildrenSort($treeArr)
+    {
+        $treeArr = collect($treeArr)->sortBy('sort')->all();
+        foreach ($treeArr as &$item) {
+            if (isset($item['children']) && sizeof($item['children'])) {
+                $item['children'] = $this->treeChildrenSort($item['children']);
+            }
+        }
+
+        return array_values($treeArr);
     }
 }

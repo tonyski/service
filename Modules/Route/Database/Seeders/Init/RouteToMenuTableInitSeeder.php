@@ -14,18 +14,19 @@ class RouteToMenuTableInitSeeder extends Seeder
         collect($this->getData())->each(function ($item) {
             if (is_array($item['route'])) {
                 $menu = Menu::where(['name' => $item['menu'], 'guard_name' => PermissionType::$GUARD_ADMIN])->first();
+
                 $routes = Route::where('guard_name', PermissionType::$GUARD_ADMIN)
                     ->whereIn('name', $item['route'])
-                    ->get()
-                    ->map->uuid
-                    ->all();
+                    ->get();
 
-                $routes = array_flip($routes);
-                array_walk($routes, function (&$route) {
-                    $route = ['sort' => ++$route];
-                });
+                $sort = array_flip($item['route']);
 
-                $menu->routes()->sync($routes);
+                $syncRoutes = [];
+                foreach ($routes as $route) {
+                    $syncRoutes[$route->uuid] = ['sort' => $sort[$route->name]];
+                }
+
+                $menu->routes()->sync($syncRoutes);
             }
         });
     }

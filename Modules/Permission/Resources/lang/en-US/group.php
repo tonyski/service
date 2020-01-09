@@ -2,5 +2,6 @@
 
 return [
     'home' => 'Index',
-    'permission' => 'PermissionManage'
+    'permission' => 'PermissionManage',
+    'route' => 'RouteManage'
 ];

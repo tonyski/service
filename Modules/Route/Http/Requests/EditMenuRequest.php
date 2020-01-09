@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Permission\Http\Requests;
+namespace Modules\Route\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class EditRoleRequest extends FormRequest
+class EditMenuRequest extends FormRequest
 {
     public function authorize()
     {

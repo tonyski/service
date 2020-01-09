@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Permission\Http\Requests;
+namespace Modules\Route\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class syncRolePermissionsRequest extends FormRequest
+class AddMenuRoutesRequest extends FormRequest
 {
     public function authorize()
     {
@@ -13,6 +13,6 @@ class syncRolePermissionsRequest extends FormRequest
 
     public function rules()
     {
-        return ['permissions' => 'array'];
+        return ['routes' => 'present|array'];
     }
 }

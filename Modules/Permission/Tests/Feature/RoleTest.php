@@ -12,6 +12,10 @@ class RoleTest extends AdminTestCase
     {
         $this->getJson(self::$roleUri)
             ->assertSuccessful()
+            ->assertJsonStructure(['data' => ['roles']]);
+
+        $this->getJson(self::$roleUri . '?limit=1')
+            ->assertSuccessful()
             ->assertJsonStructure(['data' => ['roles', 'paginate']]);
     }
 
@@ -59,10 +63,10 @@ class RoleTest extends AdminTestCase
      */
     public function testSycnRolePermissions($uuid)
     {
-        $this->putJson(self::$roleUri . '/' . $uuid . '/permissions', [])
+        $this->putJson(self::$roleUri . '/' . $uuid . '/permissions', ['permissions' => []])
             ->assertSuccessful();
     }
-    
+
     /**
      * @depends testStoreRole
      */
