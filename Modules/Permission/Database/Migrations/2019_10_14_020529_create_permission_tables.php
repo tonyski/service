@@ -41,7 +41,6 @@ class CreatePermissionTables extends Migration
             $table->unique(['name','guard_name']);
         });
 
-        //此表为 用户拥有的零时权限
         Schema::create($tableNames['model_has_permissions'], function (Blueprint $table) use ($tableNames, $columnNames) {
             $table->char('permission_uuid', 32);
 
@@ -49,7 +48,6 @@ class CreatePermissionTables extends Migration
             $table->char($columnNames['model_morph_key'],32);
             $table->index([$columnNames['model_morph_key'], 'model_type', ], 'model_has_permissions_model_id_model_type_index');
 
-            $table->timestamp('expires_at')->comment('零时权限的过期时间');
             $table->timestamp('created_at')->nullable()->useCurrent();
 
             $table->foreign('permission_uuid')

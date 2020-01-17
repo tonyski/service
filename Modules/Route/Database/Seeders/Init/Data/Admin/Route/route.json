@@ -24,5 +24,18 @@
       "zh-CN": "入口管理"
     },
     "comment": "侧边栏分类入口管理"
+  },
+  {
+    "permission": "admin.view",
+    "uuid": "",
+    "guard_name": "",
+    "type": "",
+    "route": "/admin",
+    "name": "admin",
+    "locale": {
+      "en-US": "AdminManage",
+      "zh-CN": "用户管理"
+    },
+    "comment": "管理所有的用户"
   }
 ]

@@ -10,6 +10,7 @@ use Modules\Permission\Http\Requests\RolesRequest;
 use Modules\Permission\Http\Requests\CreateRoleRequest;
 use Modules\Permission\Http\Requests\EditRoleRequest;
 use Modules\Permission\Http\Requests\SyncRolePermissionsRequest;
+use Modules\Permission\Http\Requests\RolesPermissionsRequest;
 
 class RoleController extends Controller
 {
@@ -89,6 +90,13 @@ class RoleController extends Controller
         }
 
         return $this->failed();
+    }
+
+    public function rolesPermissions(RolesPermissionsRequest $request)
+    {
+        $guard = $request->query('filter')['guard_name'];
+        $rolesPermissions = Role::with('permissions')->where('guard_name', $guard)->get();
+        return $this->successWithData(['roles' => $rolesPermissions]);
     }
 
 }

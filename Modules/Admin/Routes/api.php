@@ -1,18 +1,19 @@
 <?php
 
-use Illuminate\Http\Request;
+//访问用户管理的权限，包含查看用户列表，用户拥有的角色，用户拥有的直接(临时)权限
+Route::middleware(['permission:admin.view'])->group(function () {
+    Route::get('admins', 'AdminController@index')->name('admins.index');
+//    Route::get('admins/{uuid}/roles', 'AdminController@roles')->name('admins.roles');
+//    Route::get('admins/{uuid}/permissions', 'AdminController@permissions')->name('admins.permissions');
+    Route::get('admins/{uuid}/rolesPermissions', 'AdminController@rolesPermissions')->name('admins.rolesPermissions');
+});
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::get('/admin', function (Request $request) {
-    return $request->user();
+//操作用户管理的权限，包含添加用户，更新用户，删除用户，设置用户的权限
+Route::middleware(['permission:admin.action'])->group(function () {
+    Route::post('admins', 'AdminController@store')->name('admins.store');
+    Route::patch('admins/{uuid}', 'AdminController@update')->name('admins.update');
+    Route::delete('admins/{uuid}', 'AdminController@destroy')->name('admins.destroy');
+//    Route::put('admins/{uuid}/roles', 'AdminController@syncRoles')->name('admins.syncRoles');
+//    Route::put('admins/{uuid}/permissions', 'AdminController@syncPermissions')->name('admins.syncPermissions');
+    Route::put('admins/{uuid}/rolesPermissions', 'AdminController@syncRolesPermissions')->name('admins.syncRolesPermissions');
 });

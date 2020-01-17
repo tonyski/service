@@ -3,7 +3,8 @@
     "menu": "system",
     "route": [
       "permission",
-      "route"
+      "route",
+      "admin"
     ]
   }
 ]

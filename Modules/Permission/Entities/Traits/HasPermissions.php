@@ -13,7 +13,7 @@ use Modules\Permission\Entities\PermissionType;
 trait HasPermissions
 {
     use SpatieHasPermissions;
-    
+
     private $indexPermission = null; // 用户的首页权限
 
     /**
@@ -27,7 +27,7 @@ trait HasPermissions
             config('permission.table_names.model_has_permissions'),
             config('permission.column_names.model_morph_key'),
             'permission_uuid'
-        )->withPivot('expires_at');
+        );
     }
 
     /**

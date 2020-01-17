@@ -16,6 +16,6 @@ class AdminInitSeeder extends Seeder
     {
         Model::unguard();
 
-         $this->call(\Modules\Admin\Database\Seeders\Init\AdminTableInitSeeder::class);
+        $this->call(Init\AdminTableInitSeeder::class);
     }
 }

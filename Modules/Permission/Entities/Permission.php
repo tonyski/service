@@ -59,7 +59,7 @@ class Permission extends SpatiePermission implements ContractsPermission
             config('permission.table_names.model_has_permissions'),
             'permission_uuid',
             config('permission.column_names.model_morph_key')
-        )->withPivot('expires_at');
+        );
     }
 
     public static function findByUuId($uuid): PermissionContract

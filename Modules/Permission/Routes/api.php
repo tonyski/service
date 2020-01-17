@@ -12,6 +12,7 @@ Route::middleware(['permission:permission.view'])->group(function () {
     Route::get('roles/{uuid}/permissions', 'RoleController@permissions')->name('roles.permissions');
     Route::get('permissions', 'PermissionController@index')->name('permissions.index');
     Route::get('groups/permissions', 'PermissionController@groups')->name('groups.permissions');
+    Route::get('roles/permissions', 'RoleController@rolesPermissions')->name('roles.rolesPermissions');
 });
 
 //操作权限管理

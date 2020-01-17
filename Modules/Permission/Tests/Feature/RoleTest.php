@@ -7,6 +7,14 @@ use Modules\Base\Tests\AdminTestCase;
 class RoleTest extends AdminTestCase
 {
     private static $roleUri = 'permission/roles';
+    private static $rolesPermissionsUri = 'permission/roles/permissions';
+
+    public function testFetchRolesPermissions()
+    {
+        $this->getJson(self::$rolesPermissionsUri . '?filter[guard_name]=admin')
+            ->assertSuccessful()
+            ->assertJsonStructure(['data' => ['roles']]);
+    }
 
     public function testFetchRoles()
     {
@@ -38,7 +46,7 @@ class RoleTest extends AdminTestCase
      */
     public function testUpdateRole($uuid)
     {
-        $response = $this->patchJson(self::$roleUri . '/' . $uuid, [
+        $this->patchJson(self::$roleUri . '/' . $uuid, [
             'locale' => config('app.locales'),
             'name' => $this->faker()->unique()->regexify('^[a-z]+(\.[a-z]+){0,2}$'),
             'guard_name' => config('auth.defaults.guard'),
@@ -61,7 +69,7 @@ class RoleTest extends AdminTestCase
     /**
      * @depends testStoreRole
      */
-    public function testSycnRolePermissions($uuid)
+    public function testSyncRolePermissions($uuid)
     {
         $this->putJson(self::$roleUri . '/' . $uuid . '/permissions', ['permissions' => []])
             ->assertSuccessful();
@@ -72,7 +80,7 @@ class RoleTest extends AdminTestCase
      */
     public function testDestroyRole($uuid)
     {
-        $response = $this->deleteJson(self::$roleUri . '/' . $uuid)
+        $this->deleteJson(self::$roleUri . '/' . $uuid)
             ->assertSuccessful(['status' => 'success']);
     }
 }
