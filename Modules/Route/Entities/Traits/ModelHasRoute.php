@@ -8,24 +8,18 @@ use Modules\Route\Entities\Route;
 
 trait ModelHasRoute
 {
-    private $indexRoute = null; // 用户的首页入口
-
     /**
      * 返回用户的首页入口信息
      */
-    public function getRouteIndex()
+    public function getIndexRoute()
     {
-        if (is_null($this->indexRoute)) {
-            $permission = $this->getIndexPermissions();
+        $permission = $this->getDefaultIndexPermission();
 
-            if (is_null($permission)) {
-                $this->indexRoute = Route::where('name', 'home')->first();
-            } else {
-                $this->indexRoute = $permission->route;
-            }
+        if ($permission) {
+            return $permission->route;
         }
 
-        return $this->indexRoute;
+        return Route::where('name', 'home')->first();
     }
 
     /**

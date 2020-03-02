@@ -58,9 +58,17 @@ return [
             'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
         ],
 
+        /**
+         * 自动运行的队列
+         * 'queue' => default,emails
+         *
+         * php artisan queue:work redis --queue=default --tries=3 --timeout=30
+         * php artisan queue:work redis --queue=emails --tries=3 --timeout=30
+         *
+         */
         'redis' => [
             'driver' => 'redis',
-            'connection' => 'default',
+            'connection' => 'queue',
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,

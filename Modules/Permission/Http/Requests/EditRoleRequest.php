@@ -21,7 +21,7 @@ class EditRoleRequest extends FormRequest
 
         return array_merge([
             'locale' => 'required|array',
-            'name' => 'bail|required|max:255|regex:/^[a-z]+(\.[a-z]+)*$/',// 格式为 aaa     aaa.bbb    aaa.bbb.ccc
+            'name' => 'bail|required|max:255|regex:/^[a-z]+(\.[a-z]+)*$/|not_regex:/^[0-9a-f]{32}$/',// 格式为 aaa     aaa.bbb    aaa.bbb.ccc
             'comment' => 'max:255',
         ], $localeRule);
     }

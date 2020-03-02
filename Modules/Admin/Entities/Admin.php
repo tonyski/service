@@ -5,7 +5,7 @@ namespace Modules\Admin\Entities;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Modules\AuthAdmin\Entities\Traits\CanResetPassword;
+use Modules\Admin\Entities\Traits\CanResetPassword;
 use Modules\Permission\Entities\Traits\HasRoles;
 use Modules\Route\Entities\Traits\ModelHasRoute;
 

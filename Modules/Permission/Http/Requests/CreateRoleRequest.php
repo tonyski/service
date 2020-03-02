@@ -21,7 +21,7 @@ class CreateRoleRequest extends FormRequest
 
         return array_merge([
             'locale' => 'required|array',
-            'name' => 'bail|required|max:255|regex:/^[a-z]+(\.[a-z]+)*$/|unique:roles',// 格式为 aaa     aaa.bbb    aaa.bbb.ccc
+            'name' => 'bail|required|max:255|regex:/^[a-z]+(\.[a-z]+)*$/|not_regex:/^[0-9a-f]{32}$/|unique:roles',// 格式为 aaa     aaa.bbb    aaa.bbb.ccc
             'guard_name' => 'required|in:admin,customer,supplier',
             'comment' => 'max:255',
         ], $localeRule);

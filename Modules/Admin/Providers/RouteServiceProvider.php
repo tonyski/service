@@ -34,6 +34,7 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
+        $this->mapAuthRoutes();
     }
 
     /**
@@ -46,8 +47,17 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('admin')
-            ->middleware(['api','auth:admin'])
+            ->middleware(['api', 'auth:admin'])
             ->namespace($this->moduleNamespace)
             ->group(__DIR__ . '/../Routes/api.php');
+    }
+
+    protected function mapAuthRoutes()
+    {
+        Route::prefix('admin/auth')
+            ->middleware('api')
+            ->namespace($this->moduleNamespace . '\Auth')
+            ->name('admin.auth.')
+            ->group(__DIR__ . '/../Routes/auth.php');
     }
 }

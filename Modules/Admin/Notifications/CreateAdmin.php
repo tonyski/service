@@ -2,16 +2,23 @@
 
 namespace Modules\Admin\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class CreateAdmin extends Notification
+class CreateAdmin extends Notification implements ShouldQueue
 {
+    use Queueable;
+
     public $password;
 
     public function __construct($password)
     {
         $this->password = $password;
+
+        $this->onConnection('redis');
+        $this->onQueue('emails');
     }
 
     /**

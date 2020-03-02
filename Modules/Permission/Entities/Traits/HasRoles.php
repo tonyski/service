@@ -5,35 +5,33 @@ namespace Modules\Permission\Entities\Traits;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Spatie\Permission\Traits\HasRoles as SpatieHasRoles;
 use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 trait HasRoles
 {
-    use SpatieHasRoles, HasPermissions {
-        HasPermissions::bootHasPermissions insteadof SpatieHasRoles;
-        HasPermissions::getPermissionClass insteadof SpatieHasRoles;
-        HasPermissions::permissions insteadof SpatieHasRoles;
-        HasPermissions::scopePermission insteadof SpatieHasRoles;
-        HasPermissions::convertToPermissionModels insteadof SpatieHasRoles;
-        HasPermissions::hasPermissionTo insteadof SpatieHasRoles;
-        HasPermissions::hasUncachedPermissionTo insteadof SpatieHasRoles;
-        HasPermissions::checkPermissionTo insteadof SpatieHasRoles;
-        HasPermissions::hasAnyPermission insteadof SpatieHasRoles;
-        HasPermissions::hasAllPermissions insteadof SpatieHasRoles;
-        HasPermissions::hasPermissionViaRole insteadof SpatieHasRoles;
-        HasPermissions::hasDirectPermission insteadof SpatieHasRoles;
-        HasPermissions::getPermissionsViaRoles insteadof SpatieHasRoles;
-        HasPermissions::getAllPermissions insteadof SpatieHasRoles;
-        HasPermissions::givePermissionTo insteadof SpatieHasRoles;
-        HasPermissions::syncPermissions insteadof SpatieHasRoles;
-        HasPermissions::revokePermissionTo insteadof SpatieHasRoles;
-        HasPermissions::getPermissionNames insteadof SpatieHasRoles;
-        HasPermissions::getStoredPermission insteadof SpatieHasRoles;
-        HasPermissions::ensureModelSharesGuard insteadof SpatieHasRoles;
-        HasPermissions::getGuardNames insteadof SpatieHasRoles;
-        HasPermissions::getDefaultGuardName insteadof SpatieHasRoles;
-        HasPermissions::forgetCachedPermissions insteadof SpatieHasRoles;
+    use HasPermissions;
+
+    private $roleClass;
+
+    public static function bootHasRoles()
+    {
+        static::deleting(function ($model) {
+            if (method_exists($model, 'isForceDeleting') && !$model->isForceDeleting()) {
+                return;
+            }
+
+            $model->roles()->detach();
+        });
+    }
+
+    public function getRoleClass()
+    {
+        if (!isset($this->roleClass)) {
+            $this->roleClass = app(PermissionRegistrar::class)->getRoleClass();
+        }
+
+        return $this->roleClass;
     }
 
     /**
@@ -50,6 +48,15 @@ trait HasRoles
         )->withPivot('is_default');
     }
 
+    /**
+     * Scope the model query to certain roles only.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string|array|\Modules\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     * @param string $guard
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
     public function scopeRole(Builder $query, $roles, $guard = null): Builder
     {
         if ($roles instanceof Collection) {
@@ -65,8 +72,7 @@ trait HasRoles
                 return $role;
             }
 
-//            $method = is_numeric($role) ? 'findById' : 'findByName';
-            $method = 'findByName';
+            $method = preg_match('/^[0-9a-f]{32}$/', $role) ? 'findByUuid' : 'findByName';
             $guard = $guard ?: $this->getDefaultGuardName();
 
             return $this->getRoleClass()->{$method}($role, $guard);
@@ -81,6 +87,13 @@ trait HasRoles
         });
     }
 
+    /**
+     * Assign the given role to the model.
+     *
+     * @param array|string|\Modules\Permission\Contracts\Role ...$roles
+     *
+     * @return $this
+     */
     public function assignRole(...$roles)
     {
         $roles = collect($roles)
@@ -126,6 +139,83 @@ trait HasRoles
         return $this;
     }
 
+    /**
+     * Revoke the given role from the model.
+     *
+     * @param string|\Modules\Permission\Contracts\Role $role
+     *
+     * @return Object
+     */
+    public function removeRole($role)
+    {
+        $this->roles()->detach($this->getStoredRole($role));
+
+        $this->load('roles');
+
+        $this->forgetCachedPermissions();
+
+        return $this;
+    }
+
+    /**
+     * Remove all current roles and set the given ones.
+     *
+     * @param array|\Modules\Permission\Contracts\Role|string ...$roles
+     *
+     * @return $this
+     */
+    public function syncRoles(...$roles)
+    {
+        $roles = collect($roles)
+            ->flatten()
+            ->map(function ($role) {
+                if (empty($role)) {
+                    return false;
+                }
+
+                return $this->getStoredRole($role);
+            })
+            ->filter(function ($role) {
+                return $role instanceof Role;
+            })
+            ->each(function ($role) {
+                $this->ensureModelSharesGuard($role);
+            })
+            ->map->uuid
+            ->all();
+
+        $model = $this->getModel();
+
+        if ($model->exists) {
+            $this->roles()->sync($roles);
+            $model->load('roles');
+        } else {
+            $class = \get_class($model);
+
+            $class::saved(
+                function ($object) use ($roles, $model) {
+                    static $modelLastFiredOn;
+                    if ($modelLastFiredOn !== null && $modelLastFiredOn === $model) {
+                        return;
+                    }
+                    $object->roles()->sync($roles);
+                    $object->load('roles');
+                    $modelLastFiredOn = $object;
+                });
+        }
+
+        $this->forgetCachedPermissions();
+
+        return $this;
+    }
+
+    /**
+     * Determine if the model has (one of) the given role(s).
+     *
+     * @param string|array|\Modules\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     *
+     * @return bool
+     */
     public function hasRole($roles): bool
     {
         if (is_string($roles) && false !== strpos($roles, '|')) {
@@ -133,7 +223,11 @@ trait HasRoles
         }
 
         if (is_string($roles)) {
-            return $this->roles->contains('name', $roles);
+            if (preg_match('/^[0-9a-f]{32}$/', $roles)) {
+                return $this->roles->contains('uuid', $roles);
+            } else {
+                return $this->roles->contains('name', $roles);
+            }
         }
 
         if ($roles instanceof Role) {
@@ -153,6 +247,25 @@ trait HasRoles
         return $roles->intersect($this->roles)->isNotEmpty();
     }
 
+    /**
+     * Determine if the model has any of the given role(s).
+     *
+     * @param string|array|\Modules\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     *
+     * @return bool
+     */
+    public function hasAnyRole($roles): bool
+    {
+        return $this->hasRole($roles);
+    }
+
+    /**
+     * Determine if the model has all of the given role(s).
+     *
+     * @param string|\Modules\Permission\Contracts\Role|\Illuminate\Support\Collection $roles
+     *
+     * @return bool
+     */
     public function hasAllRoles($roles): bool
     {
         if (is_string($roles) && false !== strpos($roles, '|')) {
@@ -160,7 +273,11 @@ trait HasRoles
         }
 
         if (is_string($roles)) {
-            return $this->roles->contains('name', $roles);
+            if (preg_match('/^[0-9a-f]{32}$/', $roles)) {
+                return $this->roles->contains('uuid', $roles);
+            } else {
+                return $this->roles->contains('name', $roles);
+            }
         }
 
         if ($roles instanceof Role) {
@@ -174,14 +291,63 @@ trait HasRoles
         return $roles->intersect($this->getRoleNames()) == $roles;
     }
 
+    /**
+     * Return all permissions directly coupled to the model.
+     */
+    public function getDirectPermissions(): Collection
+    {
+        return $this->permissions;
+    }
+
+    public function getRoleNames(): Collection
+    {
+        return $this->roles->pluck('name');
+    }
+
     protected function getStoredRole($role): Role
     {
         $roleClass = $this->getRoleClass();
 
         if (is_string($role)) {
-            return $roleClass->findByName($role, $this->getDefaultGuardName());
+            if (preg_match('/^[0-9a-f]{32}$/', $role)) {
+                return $roleClass->findByUuid($role, $this->getDefaultGuardName());
+            } else {
+                return $roleClass->findByName($role, $this->getDefaultGuardName());
+            }
         }
 
         return $role;
+    }
+
+    protected function convertPipeToArray(string $pipeString)
+    {
+        $pipeString = trim($pipeString);
+
+        if (strlen($pipeString) <= 2) {
+            return $pipeString;
+        }
+
+        $quoteCharacter = substr($pipeString, 0, 1);
+        $endCharacter = substr($quoteCharacter, -1, 1);
+
+        if ($quoteCharacter !== $endCharacter) {
+            return explode('|', $pipeString);
+        }
+
+        if (!in_array($quoteCharacter, ["'", '"'])) {
+            return explode('|', $pipeString);
+        }
+
+        return explode('|', trim($pipeString, $quoteCharacter));
+    }
+
+    /**
+     * 得到用户默认的角色
+     *
+     * @return  \Modules\Permission\Contracts\Role|Null
+     */
+    public function getDefaultRole()
+    {
+        return $this->roles()->where('is_default', 1)->first();
     }
 }

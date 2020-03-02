@@ -10,18 +10,17 @@ namespace Modules\Permission\Entities;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Spatie\Permission\Contracts\Permission as PermissionContract;
+use Spatie\Permission\Guard;
 use Spatie\Permission\Models\Permission as SpatiePermission;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
+use Modules\Permission\Exceptions\PermissionDoesNotExist;
 use Modules\Permission\Contracts\Permission as ContractsPermission;
 use Modules\Permission\Entities\Traits\HasRoles;
 use Modules\Permission\Entities\Traits\RefreshesPermissionCache;
 use Modules\Route\Entities\Traits\PermissionToRoute;
-use Modules\Base\Support\Locale\LocaleTrait;
 
 class Permission extends SpatiePermission implements ContractsPermission
 {
-    use HasRoles, RefreshesPermissionCache, PermissionToRoute, LocaleTrait;
+    use HasRoles, RefreshesPermissionCache, PermissionToRoute;
 
     protected $primaryKey = 'uuid';
 
@@ -62,12 +61,13 @@ class Permission extends SpatiePermission implements ContractsPermission
         );
     }
 
-    public static function findByUuId($uuid): PermissionContract
+    public static function findByUuid($uuid, $guardName = null): ContractsPermission
     {
-        $permission = static::getPermissions(['uuid' => $uuid])->first();
+        $guardName = $guardName ?? Guard::getDefaultName(static::class);
+        $permission = static::getPermissions(['uuid' => $uuid, 'guard_name' => $guardName])->first();
 
-        if (!$permission) {
-            throw PermissionDoesNotExist::withId($uuid);
+        if (! $permission) {
+            throw PermissionDoesNotExist::withUuid($uuid);
         }
 
         return $permission;

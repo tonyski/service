@@ -10,18 +10,17 @@ namespace Modules\Permission\Entities;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Spatie\Permission\Contracts\Role as RoleContract;
-use Spatie\Permission\Exceptions\GuardDoesNotMatch;
+use Spatie\Permission\Guard;
 use Spatie\Permission\Models\Role as SpatieRole;
 use Modules\Permission\Contracts\Role as ContractsRole;
 use Modules\Permission\Entities\Traits\HasPermissions;
 use Modules\Permission\Entities\Traits\RefreshesPermissionCache;
 use Modules\Permission\Exceptions\RoleDoesNotExist;
-use Modules\Base\Support\Locale\LocaleTrait;
+use Modules\Permission\Exceptions\GuardDoesNotMatch;
 
 class Role extends SpatieRole implements ContractsRole
 {
-    use HasPermissions, RefreshesPermissionCache, LocaleTrait;
+    use HasPermissions, RefreshesPermissionCache;
 
     protected $primaryKey = 'uuid';
 
@@ -62,11 +61,13 @@ class Role extends SpatieRole implements ContractsRole
         )->withPivot('is_default');
     }
 
-    public static function findByUuId($uuid): RoleContract
+    public static function findByUuid($uuid, $guardName = null): ContractsRole
     {
-        $role = static::where('uuid', $uuid)->first();
+        $guardName = $guardName ?? Guard::getDefaultName(static::class);
 
-        if (!$role) {
+        $role = static::where('uuid', $uuid)->where('guard_name', $guardName)->first();
+
+        if (! $role) {
             throw RoleDoesNotExist::withUuid($uuid);
         }
 
@@ -80,14 +81,18 @@ class Role extends SpatieRole implements ContractsRole
      *
      * @return bool
      *
-     * @throws \Spatie\Permission\Exceptions\GuardDoesNotMatch
+     * @throws \Modules\Permission\Exceptions\GuardDoesNotMatch
      */
     public function hasPermissionTo($permission): bool
     {
         $permissionClass = $this->getPermissionClass();
 
         if (is_string($permission)) {
-            $permission = $permissionClass->findByName($permission, $this->getDefaultGuardName());
+            if (preg_match('/^[0-9a-f]{32}$/', $permission)) {
+                $permission = $permissionClass->findByUuid($permission, $this->getDefaultGuardName());
+            } else {
+                $permission = $permissionClass->findByName($permission, $this->getDefaultGuardName());
+            }
         }
 
         if (!$this->getGuardNames()->contains($permission->guard_name)) {
@@ -96,4 +101,5 @@ class Role extends SpatieRole implements ContractsRole
 
         return $this->permissions->contains('uuid', $permission->uuid);
     }
+
 }

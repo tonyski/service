@@ -27,7 +27,7 @@ class RoleHasPermissionTableInitSeeder extends Seeder
                         ->first();
                     $permissions[] = $index->uuid;
 
-                    $role->permissions()->sync($permissions);
+                    $role->syncPermissions($permissions);
                 }
             }
 
@@ -36,7 +36,7 @@ class RoleHasPermissionTableInitSeeder extends Seeder
                 $permissions = Permission::where('guard_name', PermissionType::$GUARD_ADMIN)
                     ->whereIn('name', $item['permission'])
                     ->get()->map->uuid->all();
-                $role->permissions()->sync($permissions);
+                $role->syncPermissions($permissions);
             }
         });
     }

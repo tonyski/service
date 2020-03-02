@@ -2,8 +2,6 @@
 
 namespace Modules\Route\Entities\Traits;
 
-use Illuminate\Support\Collection;
-
 trait PermissionToRoute
 {
     /**

@@ -20,8 +20,14 @@ php artisan jwt:secret
 
 ### 迁移数据表，填充数据库必须的数据
 ```
-php artisan module:migrate
+php artisan migrate
 php artisan module:seed-init
+```
+
+### 配置Supervisor，运行守护队列进程
+```
+php artisan queue:work redis --queue=default --tries=3 --timeout=30
+php artisan queue:work redis --queue=emails --tries=3 --timeout=30
 ```
 
 ### 修改配置,测试

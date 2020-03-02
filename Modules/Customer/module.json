@@ -1,0 +1,13 @@
+{
+    "name": "Customer",
+    "alias": "customer",
+    "description": "前台用户管理",
+    "keywords": [],
+    "order": 100,
+    "providers": [
+        "Modules\\Customer\\Providers\\CustomerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

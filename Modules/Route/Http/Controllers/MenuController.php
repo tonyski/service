@@ -18,7 +18,7 @@ class MenuController extends Controller
     {
         $data = [];
         //获取当前登录用户的首页
-        $data['index'] = $request->user()->getRouteIndex();
+        $data['index'] = $request->user()->getIndexRoute();
         //获取当前登录用户的所有访问入口和侧边栏分类
         $data['menu'] = $request->user()->getRouteMenuTree();
 

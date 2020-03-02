@@ -93,7 +93,7 @@ return [
 
         'customers' => [
             'driver' => 'eloquent',
-            'model' => Modules\AuthCustomer\Entities\Customer::class,
+            'model' => Modules\Customer\Entities\Customer::class,
         ],
 
         'admins' => [

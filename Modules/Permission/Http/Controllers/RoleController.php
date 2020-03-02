@@ -47,7 +47,7 @@ class RoleController extends Controller
 
     public function update(EditRoleRequest $request, $uuid)
     {
-        $role = Role::findByUuId($uuid);
+        $role = Role::findByUuid($uuid);
 
         if (!$role->is_system) {
             if ($role->name != $request->input('name')) {
@@ -67,7 +67,7 @@ class RoleController extends Controller
 
     public function destroy($uuid)
     {
-        $role = Role::findByUuId($uuid);
+        $role = Role::findByUuid($uuid);
         if (!$role->is_system && $role->delete()) {
             return $this->deleteSuccess();
         }
@@ -76,16 +76,16 @@ class RoleController extends Controller
 
     public function permissions($uuid)
     {
-        $role = Role::findByUuId($uuid);
+        $role = Role::findByUuid($uuid);
         return $this->successWithData(['permissions' => $role->permissions]);
     }
 
     public function syncPermissions(SyncRolePermissionsRequest $request, $uuid)
     {
-        $role = Role::findByUuId($uuid);
+        $role = Role::findByUuid($uuid);
 
         if (!$role->is_system) {
-            $role->permissions()->sync($request->input('permissions'));
+            $role->syncPermissions($request->input('permissions'));
             return $this->successWithMessage();
         }
 

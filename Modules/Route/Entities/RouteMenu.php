@@ -5,12 +5,9 @@ namespace Modules\Route\Entities;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Base\Entities\Model;
-use Modules\Base\Support\Locale\LocaleTrait;
 
 class RouteMenu extends Model
 {
-    use LocaleTrait;
-
     protected $casts = [
         'locale' => 'json',
     ];

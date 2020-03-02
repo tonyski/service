@@ -2,11 +2,15 @@
 
 namespace Modules\Admin\Notifications;
 
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class UpdateAdmin extends Notification
+class UpdateAdmin extends Notification implements ShouldQueue
 {
+    use Queueable;
+
     public $name;
     public $email;
 
@@ -14,6 +18,9 @@ class UpdateAdmin extends Notification
     {
         $this->name = $name;
         $this->email = $email;
+
+        $this->onConnection('redis');
+        $this->onQueue('emails');
     }
 
     /**

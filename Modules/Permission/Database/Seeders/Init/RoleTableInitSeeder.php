@@ -11,6 +11,9 @@ class RoleTableInitSeeder extends Seeder
 {
     public function run()
     {
+        /**
+         * 角色名称的命名 $item['name']，不能命名成uuid的格式，正则为/^[0-9a-f]{32}$/
+         */
         collect($this->getData())->each(function ($item) {
             Role::firstOrCreate(
                 ['name' => $item['name'], 'guard_name' => PermissionType::$GUARD_ADMIN],

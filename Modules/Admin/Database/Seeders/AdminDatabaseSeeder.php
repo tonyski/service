@@ -16,7 +16,7 @@ class AdminDatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        factory(\Modules\Admin\Entities\Admin::class, 10)->create();
+        factory(\Modules\Admin\Entities\Admin::class, 10000)->create();
         // $this->call("OthersTableSeeder");
     }
 }

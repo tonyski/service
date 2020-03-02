@@ -1,8 +1,7 @@
 {
-    "AuthAdmin": true,
-    "AuthCustomer": true,
-    "Permission": true,
-    "Route": true,
     "Admin": true,
-    "Base": true
+    "Base": true,
+    "Customer": true,
+    "Permission": true,
+    "Route": true
 }

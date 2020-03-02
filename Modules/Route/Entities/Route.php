@@ -4,12 +4,9 @@ namespace Modules\Route\Entities;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Base\Entities\Model;
-use Modules\Base\Support\Locale\LocaleTrait;
 
 class Route extends Model
 {
-    use LocaleTrait;
-
     protected $casts = [
         'locale' => 'json',
     ];
