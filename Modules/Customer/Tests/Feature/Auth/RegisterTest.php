@@ -16,7 +16,7 @@ class RegisterTest extends TestCase
     {
         parent::setUp();
 
-        if (!self::$customer){
+        if (!self::$customer) {
             self::$customer = [
                 'name' => $this->faker()->unique()->userName,
                 'email' => $this->faker()->unique()->email,
@@ -43,6 +43,7 @@ class RegisterTest extends TestCase
             ->assertStatus(422)
             ->assertJsonValidationErrors(['name', 'email']);
 
-        Customer::where('email', self::$customer['email'])->delete();
+        $customer = Customer::where('email', self::$customer['email'])->first();
+        $customer->delete();
     }
 }

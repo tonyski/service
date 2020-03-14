@@ -46,6 +46,8 @@ class ResetPasswordController extends Controller
 
         $user->save();
 
+        $user->incrementJWTVersion();
+
 //        event(new PasswordReset($user));
 
 //        $this->guard()->login($user);

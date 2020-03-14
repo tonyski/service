@@ -26,6 +26,7 @@ class LoginTest extends TestCase
         $response = $this->postJson(self::$uriLogin, [
             'username' => $this->getAdmin()->email,
             'password' => 'password',
+            'remember' => false
         ])
             ->assertSuccessful()
             ->assertJsonStructure(['data' => ['admin', 'accessToken', 'tokenType', 'expiresIn']]);

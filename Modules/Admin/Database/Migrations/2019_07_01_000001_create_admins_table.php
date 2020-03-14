@@ -17,6 +17,7 @@ class CreateAdminsTable extends Migration
             $table->char('uuid', 32)->primary();
             $table->string('name')->unique();
             $table->string('email')->unique();
+            $table->string('avatar')->default('');
             $table->string('password');
             $table->timestamps();
         });

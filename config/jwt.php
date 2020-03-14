@@ -149,6 +149,9 @@ return [
     | A TokenInvalidException will be thrown if any of these claims are not
     | present in the payload.
     |
+    | ver : 相当于给token自定义一个版本号version,从 1 开始递增，用于废弃token，
+    | 服务器存储token载荷对应的ver的值，当用户重置密码时，服务器的值加一，
+    | token载荷的ver的值,小于服务器的值 视为无效。
     */
 
     'required_claims' => [
@@ -158,6 +161,7 @@ return [
         'nbf',
         'sub',
         'jti',
+        'ver',
     ],
 
     /*

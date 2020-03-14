@@ -32,7 +32,21 @@ class AuthAttempt extends Middleware
         }
         foreach ($guards as $guard) {
             if ($this->auth->guard($guard)->check()) {
-                return $this->auth->shouldUse($guard);
+                $this->auth->shouldUse($guard);
+
+                if (app()->runningUnitTests()) {
+                    return;
+                }
+
+                // 服务器和token的载荷上的版本号不相同则视为 token 无效
+                $currentVersion = $this->auth->guard($guard)->user()->getJWTVersion();
+                $tokenVersion = $this->auth->guard($guard)->getPayload()->get('ver');
+                if ($currentVersion == $tokenVersion) {
+                    return;
+                }
+
+                $this->auth->guard($guard)->logout();
+                break;
             }
         }
     }

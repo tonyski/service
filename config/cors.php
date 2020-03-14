@@ -13,7 +13,7 @@ return [
     */
 
     'supportsCredentials' => false,
-    'allowedOrigins' => [config('app.url'),config('app.client_customer_url'),config('app.client_admin_url')],
+    'allowedOrigins' => [config('app.url'), config('app.client_admin_url'), config('app.client_customer_url')],
     'allowedOriginsPatterns' => [],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],

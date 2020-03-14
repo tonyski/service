@@ -26,6 +26,7 @@ class LoginRequest extends FormRequest
         return [
             'username' => 'bail|required|string',
             'password' => 'bail|required|string|min:8',
+            'remember' => 'bail|required|boolean',
         ];
     }
 }

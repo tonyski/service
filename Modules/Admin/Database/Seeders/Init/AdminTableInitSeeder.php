@@ -1,12 +1,15 @@
 <?php
+
 namespace Modules\Admin\Database\Seeders\Init;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use Modules\Admin\Entities\Admin;
 
 class AdminTableInitSeeder extends Seeder
 {
-    public function getData(){
+    public function getData()
+    {
         return [
             [
                 'uuid' => Str::uuid()->getHex(),
@@ -25,7 +28,7 @@ class AdminTableInitSeeder extends Seeder
     public function run()
     {
         collect($this->getData())->each(function ($item) {
-            \Modules\Admin\Entities\Admin::firstOrCreate(
+            Admin::firstOrCreate(
                 ['email' => $item['email']],
                 $item
             );

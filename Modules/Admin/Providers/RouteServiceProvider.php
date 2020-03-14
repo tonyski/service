@@ -35,6 +35,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
         $this->mapAuthRoutes();
+        $this->mapSettingsRoutes();
     }
 
     /**
@@ -59,5 +60,14 @@ class RouteServiceProvider extends ServiceProvider
             ->namespace($this->moduleNamespace . '\Auth')
             ->name('admin.auth.')
             ->group(__DIR__ . '/../Routes/auth.php');
+    }
+
+    protected function mapSettingsRoutes()
+    {
+        Route::prefix('admin/settings')
+            ->middleware(['api', 'auth:admin'])
+            ->namespace($this->moduleNamespace . '\Settings')
+            ->name('admin.settings.')
+            ->group(__DIR__ . '/../Routes/settings.php');
     }
 }
