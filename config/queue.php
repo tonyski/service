@@ -64,6 +64,7 @@ return [
          *
          * php artisan queue:work redis --queue=default --tries=3 --timeout=30
          * php artisan queue:work redis --queue=emails --tries=3 --timeout=30
+         * php artisan queue:work redis --queue=broadcast --tries=3 --timeout=30
          *
          */
         'redis' => [

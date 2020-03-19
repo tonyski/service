@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Providers;
+namespace Modules\Admin\Providers;
 
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\ServiceProvider;
 
 class BroadcastServiceProvider extends ServiceProvider
@@ -14,9 +13,6 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Broadcast::routes(['middleware' => ['api']]);
-//        Broadcast::routes();
-
-        require base_path('routes/channels.php');
+        require __DIR__ . '/../Routes/channels.php';
     }
 }

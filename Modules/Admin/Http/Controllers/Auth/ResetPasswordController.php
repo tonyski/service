@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Modules\Admin\Http\Controllers\Controller;
 use Modules\Admin\Http\Requests\Auth\ResetPasswordRequest;
+use Modules\Admin\Events\PasswordReset;
 
 class ResetPasswordController extends Controller
 {
@@ -47,6 +48,8 @@ class ResetPasswordController extends Controller
         $user->save();
 
         $user->incrementJWTVersion();
+
+        broadcast(new PasswordReset($user))->toOthers();
 
 //        event(new PasswordReset($user));
 

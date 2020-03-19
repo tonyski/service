@@ -26,8 +26,19 @@ php artisan module:seed-init
 
 ### 配置Supervisor，运行守护队列进程
 ```
+配置
 php artisan queue:work redis --queue=default --tries=3 --timeout=30
 php artisan queue:work redis --queue=emails --tries=3 --timeout=30
+php artisan queue:work redis --queue=broadcast --tries=3 --timeout=30
+
+运行
+sudo supervisorctl start all
+```
+
+### 开启广播服务,运行socket.io 服务器
+```
+运行
+sudo laravel-echo-server start
 ```
 
 ### 修改配置,测试
