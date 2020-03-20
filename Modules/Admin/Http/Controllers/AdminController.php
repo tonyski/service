@@ -4,6 +4,7 @@ namespace Modules\Admin\Http\Controllers;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Modules\Base\Contracts\ListServiceInterface;
 use Modules\Admin\Entities\Admin;
 use Modules\Admin\Http\Requests\AdminsRequest;
@@ -91,6 +92,11 @@ class AdminController extends Controller
 //         不需要手动删除角色和权限, Modules\Permission\Entities\Traits\HasRoles 会自动删除
 //        $admin->roles()->detach();
 //        $admin->permissions()->detach();
+
+        if ($admin->avatar && Storage::disk('public')->exists($admin->avatar)) {
+            Storage::disk('public')->delete($admin->avatar);
+        }
+
         return $admin->delete() ? $this->deleteSuccess() : $this->failed();
     }
 
