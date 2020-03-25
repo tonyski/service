@@ -19,7 +19,8 @@ trait ModelHasRoute
             return $permission->route;
         }
 
-        return Route::where('name', 'home')->first();
+        $guard = auth()->getDefaultDriver();
+        return Route::where(['name' => 'home', 'guard_name' => $guard])->first();
     }
 
     /**
