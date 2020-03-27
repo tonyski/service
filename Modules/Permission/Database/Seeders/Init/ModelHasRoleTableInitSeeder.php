@@ -11,6 +11,10 @@ class ModelHasRoleTableInitSeeder extends Seeder
 {
     public function run()
     {
+        $root = Admin::where('name', env('ROOT'))->first();
+        $super = Role::where(['name' => 'super', 'guard_name' => PermissionType::$GUARD_ADMIN])->first();
+        $root->syncRoles($super);
+
         collect($this->getData())->each(function ($item) {
             if (is_array($item['role'])) {
                 $admin = Admin::where('name', $item['admin'])->first();

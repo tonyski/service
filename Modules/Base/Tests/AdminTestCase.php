@@ -18,7 +18,7 @@ abstract class AdminTestCase extends TestCase
     protected function user(): Admin
     {
         if (!self::$user) {
-            self::$user = Admin::where('name', 'fly.fei')->first();
+            self::$user = Admin::where('name', env('ROOT'))->first();
         }
         return self::$user;
     }

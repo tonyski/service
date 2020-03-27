@@ -13,8 +13,8 @@ class AdminTableInitSeeder extends Seeder
         return [
             [
                 'uuid' => Str::uuid()->getHex(),
-                'name' => 'fly.fei',
-                'email' => 'fly.fei@feisu.com',
+                'name' => env('ROOT'),
+                'email' => env('ROOT_EMAIL'),
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             ]
         ];

@@ -18,8 +18,8 @@ class AccountTest extends AdminTestCase
             ->assertJsonStructure(['data' => ['admin']]);
 
         $this->patchJson(self::$accountUri, [
-            'name' => 'fly.fei',
-            'email' => 'fly.fei@feisu.com'
+            'name' => env('ROOT'),
+            'email' => env('ROOT_EMAIL')
         ])
             ->assertSuccessful()
             ->assertJsonStructure(['data' => ['admin']]);
