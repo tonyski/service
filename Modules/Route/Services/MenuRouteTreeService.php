@@ -2,15 +2,32 @@
 
 namespace Modules\Route\Services;
 
-class MenuRouteTreeService
+use Illuminate\Database\Eloquent\Collection;
+use Modules\Route\Contracts\RouteService;
+use Modules\Route\Entities\Route;
+
+class MenuRouteTreeService implements RouteService
 {
-    /**
-     * 将 菜单和入口的 ORM模型集合转换成树状数组
-     *
-     * @param  $menus  菜单和入口的模型的集合
-     * @return array
-     */
-    public static function menuRouteToTree($menus)
+    use MenuRouteTrait;
+
+    public function getIndexRoute($permission)
+    {
+        if ($permission) {
+            return $permission->route;
+        }
+
+        $guard = auth()->getDefaultDriver();
+        return Route::where(['name' => 'home', 'guard_name' => $guard])->first();
+    }
+
+    public function getMenuRouteTree(Collection $permissions)
+    {
+        $menuRoute = $this->getMenuRouteData($permissions);
+
+        return $this->arrayToTree($menuRoute);
+    }
+
+    public function menuRouteToTree(Collection $menus)
     {
         $menuRouteNode = [];
         foreach ($menus as $menu) {
@@ -32,19 +49,28 @@ class MenuRouteTreeService
             }
         }
 
-        foreach ($menuRouteNode as &$node) {
+        return $this->arrayToTree($menuRouteNode);
+    }
+
+    /**
+     * 将数组转化成有层级结构的数组，树状结构的数组
+     * @param $arr
+     * @return array
+     */
+    private function arrayToTree($arr){
+        foreach ($arr as &$node) {
             if ($node['parent_uuid']) {
-                $menuRouteNode[$node['parent_uuid']]['children'][] = &$node;
+                $arr[$node['parent_uuid']]['children'][] = &$node;
             }
         }
 
-        $menuRouteTree = collect($menuRouteNode)->filter(function ($menu) {
-            return !$menu['parent_uuid'];
+        $arr = collect($arr)->filter(function ($n) {
+            return !$n['parent_uuid'];
         })->values()->toArray();
 
-        $menuRouteTree = MenuRouteTreeService::treeChildrenSort($menuRouteTree);
+        $arr = $this->treeChildrenSort($arr);
 
-        return $menuRouteTree;
+        return $arr;
     }
 
     /**
@@ -53,12 +79,12 @@ class MenuRouteTreeService
      * @param  array $treeArr
      * @return array
      */
-    public static function treeChildrenSort($treeArr)
+    private function treeChildrenSort($treeArr)
     {
         $treeArr = collect($treeArr)->sortBy('sort')->all();
         foreach ($treeArr as &$item) {
             if (isset($item['children']) && sizeof($item['children'])) {
-                $item['children'] = MenuRouteTreeService::treeChildrenSort($item['children']);
+                $item['children'] = $this->treeChildrenSort($item['children']);
             }
         }
 

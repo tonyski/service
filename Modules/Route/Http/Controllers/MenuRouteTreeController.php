@@ -4,17 +4,17 @@ namespace Modules\Route\Http\Controllers;
 
 use Modules\Route\Entities\RouteMenu as Menu;
 use Modules\Route\Entities\Route;
-use Modules\Route\Services\MenuRouteTreeService;
+use Modules\Route\Contracts\RouteService;
 use Modules\Route\Http\Requests\EditMenuRouteTreeRequest;
 use Modules\Route\Http\Requests\DeleteMenuRouteTreeNodeRequest;
 
 class MenuRouteTreeController extends Controller
 {
-    public function tree($guard)
+    public function tree($guard, RouteService $routeService)
     {
         $menus = Menu::where('guard_name', $guard)->with('routes')->get();
 
-        return $this->successWithData(['tree' => MenuRouteTreeService::menuRouteToTree($menus)]);
+        return $this->successWithData(['tree' => $routeService->menuRouteToTree($menus)]);
     }
 
     public function update(EditMenuRouteTreeRequest $request, $guard)

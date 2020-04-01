@@ -13,7 +13,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\Permission\\Providers\\PermissionServiceProvider"
+                "Modules\\Permission\\Providers\\PermissionServiceProvider",
+                "Modules\\Permission\\Providers\\DeferrableServiceProvider"
             ],
             "aliases": {
 

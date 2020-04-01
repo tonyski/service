@@ -10,7 +10,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\Base\\Providers\\BaseServiceProvider"
+                "Modules\\Base\\Providers\\BaseServiceProvider",
+                "Modules\\Base\\Providers\\DeferrableServiceProvider"
             ],
             "aliases": {
 

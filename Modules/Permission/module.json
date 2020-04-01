@@ -5,7 +5,8 @@
     "keywords": [],
     "order": 2,
     "providers": [
-        "Modules\\Permission\\Providers\\PermissionServiceProvider"
+        "Modules\\Permission\\Providers\\PermissionServiceProvider",
+        "Modules\\Permission\\Providers\\DeferrableServiceProvider"
     ],
     "aliases": {},
     "files": [],

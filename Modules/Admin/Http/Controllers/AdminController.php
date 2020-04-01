@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Modules\Base\Contracts\ListServiceInterface;
+use Modules\Permission\Contracts\PermissionService;
 use Modules\Admin\Entities\Admin;
 use Modules\Admin\Http\Requests\AdminsRequest;
 use Modules\Admin\Http\Requests\CreateAdminRequest;
@@ -106,18 +107,14 @@ class AdminController extends Controller
         return $this->successWithData(['roles' => $admin->roles]);
     }
 
-    public function syncRoles(SyncAdminRolesRequest $request, $uuid)
+    public function syncRoles(SyncAdminRolesRequest $request, $uuid, PermissionService $permissionService)
     {
         $defaultRole = $request->input('defaultRole');
-        $rolesUuid = $request->input('roles');
-
-        $pivot = [];
-        foreach ($rolesUuid as $r) {
-            $pivot[$r] = ['is_default' => $r == $defaultRole ? 1 : 0];
-        }
-
+        $roles = $request->input('roles');
         $admin = Admin::find($uuid);
-        $admin->roles()->sync($pivot);
+
+        $permissionService->syncUserRoles($admin, $roles, $defaultRole);
+
         return $this->successWithMessage();
     }
 
@@ -127,10 +124,12 @@ class AdminController extends Controller
         return $this->successWithData(['permissions' => $admin->permissions]);
     }
 
-    public function syncPermissions(SyncAdminPermissionsRequest $request, $uuid)
+    public function syncPermissions(SyncAdminPermissionsRequest $request, $uuid, PermissionService $permissionService)
     {
         $admin = Admin::find($uuid);
-        $admin->permissions()->sync($request->input('permissions'));
+        $permissions = $request->input('permissions');
+        $permissionService->syncUserPermissions($admin, $permissions);
+
         return $this->successWithMessage();
     }
 
@@ -140,20 +139,17 @@ class AdminController extends Controller
         return $this->successWithData(['roles' => $admin->roles, 'permissions' => $admin->permissions]);
     }
 
-    public function syncRolesPermissions(SyncAdminRolesPermissionsRequest $request, $uuid)
+    public function syncRolesPermissions(SyncAdminRolesPermissionsRequest $request, $uuid, PermissionService $permissionService)
     {
         $defaultRole = $request->input('defaultRole');
-        $rolesUuid = $request->input('roles');
+        $roles = $request->input('roles');
         $permissions = $request->input('permissions');
 
-        $pivot = [];
-        foreach ($rolesUuid as $r) {
-            $pivot[$r] = ['is_default' => $r == $defaultRole ? 1 : 0];
-        }
-
         $admin = Admin::find($uuid);
-        $admin->roles()->sync($pivot);
-        $admin->permissions()->sync($permissions);
+
+        $permissionService->syncUserRoles($admin, $roles, $defaultRole);
+        $permissionService->syncUserPermissions($admin, $permissions);
+
         return $this->successWithMessage();
     }
 }

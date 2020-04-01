@@ -4,6 +4,8 @@ namespace Modules\Route\Http\Controllers;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Modules\Permission\Contracts\PermissionService;
+use Modules\Route\Contracts\RouteService;
 use Modules\Route\Entities\RouteMenu as Menu;
 use Modules\Route\Http\Requests\CreateMenuRequest;
 use Modules\Route\Http\Requests\EditMenuRequest;
@@ -14,13 +16,16 @@ class MenuController extends Controller
     /**
      * 获取当前登录用户的，首页和侧边栏
      */
-    public function fetchMenu(Request $request)
+    public function fetchMenu(Request $request, PermissionService $permissionService, RouteService $routeService)
     {
         $data = [];
+
+        $admin = $request->user();
+
         //获取当前登录用户的首页
-        $data['index'] = $request->user()->getIndexRoute();
+        $data['index'] = $routeService->getIndexRoute($permissionService->getUserIndexPermission($admin));
         //获取当前登录用户的所有访问入口和侧边栏分类
-        $data['menu'] = $request->user()->getRouteMenuTree();
+        $data['menu'] = $routeService->getMenuRouteTree($permissionService->getUserRoutePermission($admin));
 
         return $this->successWithData($data);
     }

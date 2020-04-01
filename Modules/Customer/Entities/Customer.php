@@ -3,20 +3,12 @@
 namespace Modules\Customer\Entities;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Modules\Base\Contracts\JWTSubject;
-use Modules\Base\Support\JWTAuth\JWTSubjectTrait;
+use Modules\Base\Contracts\User;
 use Modules\Customer\Entities\Traits\CanResetPassword;
 
-class Customer extends Authenticatable implements JWTSubject
+class Customer extends User
 {
-    use Notifiable, CanResetPassword, JWTSubjectTrait;
-
-    protected $primaryKey = 'uuid';
-
-    protected $keyType = 'char';
-
-    public $incrementing = false;
+    use Notifiable, CanResetPassword;
 
     protected $fillable = [
         'uuid', 'name', 'email', 'password',
