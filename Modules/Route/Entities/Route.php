@@ -7,6 +7,8 @@ use Modules\Base\Entities\Model;
 
 class Route extends Model
 {
+    protected $guarded = [];
+
     protected $casts = [
         'locale' => 'json',
     ];
