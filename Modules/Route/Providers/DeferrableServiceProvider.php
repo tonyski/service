@@ -7,17 +7,29 @@ use Illuminate\Contracts\Support\DeferrableProvider;
 use Modules\Route\Contracts\RouteService;
 use Modules\Route\Services\MenuRouteTreeService;
 
+use Modules\Route\Contracts\Services\MenuService as MenuServiceContract;
+use Modules\Route\Services\MenuService;
+use Modules\Route\Contracts\Repositories\MenuRepository as MenuRepositoryContract;
+use Modules\Route\Repositories\MenuRepository;
+
 class DeferrableServiceProvider extends ServiceProvider implements DeferrableProvider
 {
-    public function register()
-    {
-        $this->app->singleton(RouteService::class, function ($app) {
-            return new MenuRouteTreeService();
-        });
-    }
+
+    public $bindings = [
+        MenuServiceContract::class => MenuService::class,
+        MenuRepositoryContract::class => MenuRepository::class,
+    ];
+
+    public $singletons = [
+        RouteService::class => MenuRouteTreeService::class,
+    ];
 
     public function provides()
     {
-        return [RouteService::class];
+        return [
+            RouteService::class,
+            MenuServiceContract::class,
+            MenuRepositoryContract::class
+        ];
     }
 }

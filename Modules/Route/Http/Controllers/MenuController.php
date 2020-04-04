@@ -2,7 +2,6 @@
 
 namespace Modules\Route\Http\Controllers;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Modules\Permission\Contracts\PermissionService;
 use Modules\Route\Contracts\RouteService;
@@ -11,8 +10,17 @@ use Modules\Route\Http\Requests\CreateMenuRequest;
 use Modules\Route\Http\Requests\EditMenuRequest;
 use Modules\Route\Http\Requests\AddMenuRoutesRequest;
 
+use Modules\Route\Contracts\Services\MenuService;
+
 class MenuController extends Controller
 {
+    private $menuService;
+
+    public function __construct(MenuService $menuService)
+    {
+        $this->menuService = $menuService;
+    }
+
     /**
      * 获取当前登录用户的，首页和侧边栏
      */
@@ -32,42 +40,34 @@ class MenuController extends Controller
 
     public function store(CreateMenuRequest $request)
     {
-        $guardName = $request->post('guard_name');
-        $parentUuid = $request->post('parent_uuid') ?: '';
-        $sort = Menu::where(['guard_name' => $guardName, 'parent_uuid' => $parentUuid])->count();
-
-        if ($parentUuid) {
-            $sort += Menu::find($parentUuid)->routes()->count();
-        }
-
-        $menu = Menu::create([
-            'uuid' => Str::uuid()->getHex(),
-            'parent_uuid' => $parentUuid,
-            'guard_name' => $guardName,
+        $menu = new Menu([
+            'parent_uuid' => $request->post('parent_uuid') ?: '',
+            'guard_name' => $request->post('guard_name'),
             'name' => $request->post('name'),
             'icon' => $request->post('icon') ?: '',
             'locale' => $request->post('locale'),
             'comment' => $request->post('comment') ?: '',
-            'sort' => $sort,
         ]);
+
+        $menu = $this->menuService->addMenu($menu);
 
         return $this->createSuccess(['menu' => $menu]);
     }
 
     public function update(EditMenuRequest $request, $uuid)
     {
-        $menu = Menu::where('uuid', $uuid)->first();
-
-        if ($menu->name != $request->input('name')) {
-            $request->validate(['name' => 'unique:route_menus']);
-        }
-
-        $flag = $menu->update([
+        $menu = new Menu([
+            'uuid' => $uuid,
             'name' => $request->input('name'),
             'icon' => $request->input('icon') ?: '',
             'locale' => $request->input('locale'),
             'comment' => $request->input('comment') ?: '',
         ]);
+
+        $flag = $this->menuService->updateMenuByUuid($menu);
+
+        $flag ? $menu = $this->menuService->getMenuByUuid($uuid) : '';
+
         return $flag ? $this->updateSuccess(['menu' => $menu]) : $this->failed();
     }
 
