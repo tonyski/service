@@ -7,7 +7,7 @@ use Modules\Admin\Entities\Admin;
 use Modules\Permission\Entities\Role;
 use Modules\Permission\Entities\PermissionType;
 
-class ModelHasRoleTableInitSeeder extends Seeder
+class AdminHasRoleTableInitSeeder extends Seeder
 {
     public function run()
     {
@@ -33,6 +33,6 @@ class ModelHasRoleTableInitSeeder extends Seeder
 
     private function getDataFromFile($guardName)
     {
-        return json_decode(file_get_contents(__DIR__ . '/Data/' . ucfirst($guardName) . '/model_has_role.json'), true);
+        return json_decode(file_get_contents(__DIR__ . '/Data/' . ucfirst($guardName) . '/admin_has_role.json'), true);
     }
 }

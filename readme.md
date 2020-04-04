@@ -22,6 +22,7 @@ php artisan jwt:secret
 ```
 php artisan migrate
 php artisan module:seed-init
+php artisan module:seed-init --class=Init\\RoleHasAllPermissionSeeder Permission
 ```
 
 ### 配置Supervisor，运行守护队列进程

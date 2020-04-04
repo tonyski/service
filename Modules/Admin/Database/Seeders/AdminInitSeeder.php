@@ -17,5 +17,7 @@ class AdminInitSeeder extends Seeder
         Model::unguard();
 
         $this->call(Init\AdminTableInitSeeder::class);
+        $this->call(Init\PermissionInitSeeder::class);
+        $this->call(Init\RouteInitSeeder::class);
     }
 }
