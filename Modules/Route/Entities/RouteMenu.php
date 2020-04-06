@@ -8,6 +8,8 @@ use Modules\Base\Entities\Model;
 
 class RouteMenu extends Model
 {
+    protected $guarded = [];
+
     protected $casts = [
         'locale' => 'json',
     ];

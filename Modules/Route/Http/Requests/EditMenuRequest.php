@@ -20,9 +20,10 @@ class EditMenuRequest extends FormRequest
         }
 
         return array_merge([
-            'locale' => 'required|array',
             'name' => 'bail|required|max:255|regex:/^[a-z]+(\.[a-z]+)*$/',// 格式为 aaa     aaa.bbb    aaa.bbb.ccc
+            'icon' => 'present',
             'comment' => 'max:255',
+            'locale' => 'required|array',
         ], $localeRule);
     }
 }

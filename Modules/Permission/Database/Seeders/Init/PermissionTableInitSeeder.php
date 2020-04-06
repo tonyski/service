@@ -2,51 +2,27 @@
 
 namespace Modules\Permission\Database\Seeders\Init;
 
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
-use Modules\Permission\Entities\Permission;
 use Modules\Permission\Entities\PermissionType;
+use Modules\Permission\Database\Seeders\Init\Contracts\PermissionInitSeeder as Seeder;
 
 class PermissionTableInitSeeder extends Seeder
 {
-    public function run()
+    public function guard()
     {
-        /**
-         * 权限名称的命名 $item['name']，不能命名成uuid的格式，正则为/^[0-9a-f]{32}$/
-         */
-        collect($this->getData())->each(function ($item) {
-            Permission::firstOrCreate(
-                ['name' => $item['name'], 'guard_name' => PermissionType::$GUARD_ADMIN],
-                $item
-            );
-        });
+        return PermissionType::$GUARD_ADMIN;
     }
 
-    private function getData()
+    public function getDir()
     {
-        $adminFeature = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, PermissionType::$PERMISSION_FEATURE, 'feature');
-        $adminRoute = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, PermissionType::$PERMISSION_ROUTE, 'route');
-        $adminIndex = $this->getDataFromFile(PermissionType::$GUARD_ADMIN, PermissionType::$PERMISSION_INDEX, 'index');
-
-        return array_merge($adminFeature, $adminRoute, $adminIndex);
+        return __DIR__ . '/Data';
     }
 
-    private function getDataFromFile($guardName, $permissionType, $permissionName)
+    public function getFiles(): array
     {
-        $list = [];
-        $group = json_decode(file_get_contents(__DIR__ . '/Data/' . ucfirst($guardName) . '/permission/' . $permissionName . '.json'), true);
-
-        array_walk($group, function ($permissions, $key) use (&$list, $guardName, $permissionType) {
-            array_walk($permissions, function ($permission) use (&$list, $guardName, $permissionType, $key) {
-                $permission['uuid'] = Str::uuid()->getHex();
-                $permission['guard_name'] = $guardName;
-                $permission['type'] = $permissionType;
-                $permission['group'] = $key;
-
-                $list[] = $permission;
-            });
-        });
-
-        return $list;
+        return [
+            PermissionType::$PERMISSION_FEATURE => 'feature',
+            PermissionType::$PERMISSION_ROUTE => 'route',
+            PermissionType::$PERMISSION_INDEX => 'index',
+        ];
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\Route\Database\Seeders\Init;
+namespace Modules\Admin\Database\Seeders\Init;
 
-use Modules\Route\Database\Seeders\Init\Contracts\MenuInitSeeder as Seeder;
 use Modules\Permission\Entities\PermissionType;
+use Modules\Route\Database\Seeders\Init\Contracts\RouteInitSeeder as Seeder;
 
-class MenuTableInitSeeder extends Seeder
+class RouteInitSeeder extends Seeder
 {
     public function guard()
     {
@@ -19,6 +19,8 @@ class MenuTableInitSeeder extends Seeder
 
     public function getFiles(): array
     {
-        return ['menu'];
+        return [
+            PermissionType::$PERMISSION_ROUTE => 'route',
+        ];
     }
 }

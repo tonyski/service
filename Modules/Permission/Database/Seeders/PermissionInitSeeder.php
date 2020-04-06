@@ -14,6 +14,7 @@ class PermissionInitSeeder extends Seeder
         $this->call(Init\PermissionTableInitSeeder::class);
         $this->call(Init\RoleTableInitSeeder::class);
         $this->call(Init\RoleHasPermissionTableInitSeeder::class);
-        $this->call(Init\ModelHasRoleTableInitSeeder::class);
+        $this->call(Init\AdminHasRoleTableInitSeeder::class);
+        $this->call(Init\RouteInitSeeder::class);
     }
 }

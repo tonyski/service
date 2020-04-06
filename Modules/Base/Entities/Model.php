@@ -12,5 +12,4 @@ class Model extends LaravelModel
 
     public $incrementing = false;
 
-    protected $guarded = [];
 }

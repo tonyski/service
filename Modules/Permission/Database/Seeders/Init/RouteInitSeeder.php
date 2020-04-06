@@ -2,10 +2,10 @@
 
 namespace Modules\Permission\Database\Seeders\Init;
 
-use Modules\Permission\Database\Seeders\Init\Contracts\RoleHasPermissionInitSeeder as Seeder;
 use Modules\Permission\Entities\PermissionType;
+use Modules\Route\Database\Seeders\Init\Contracts\RouteInitSeeder as Seeder;
 
-class RoleHasPermissionTableInitSeeder extends Seeder
+class RouteInitSeeder extends Seeder
 {
     public function guard()
     {
@@ -19,6 +19,9 @@ class RoleHasPermissionTableInitSeeder extends Seeder
 
     public function getFiles(): array
     {
-        return ['role_has_permission'];
+        return [
+            PermissionType::$PERMISSION_ROUTE => 'route',
+            PermissionType::$PERMISSION_INDEX => 'index',
+        ];
     }
 }
