@@ -10,6 +10,7 @@ use Modules\Route\Entities\RouteMenu as Menu;
 use Modules\Route\Http\Requests\CreateMenuRequest;
 use Modules\Route\Http\Requests\EditMenuRequest;
 use Modules\Route\Http\Requests\AddMenuRoutesRequest;
+use Modules\Route\Services\MenuCacheService;
 
 class MenuController extends Controller
 {
@@ -22,10 +23,18 @@ class MenuController extends Controller
 
         $admin = $request->user();
 
-        //获取当前登录用户的首页
-        $data['index'] = $routeService->getIndexRoute($permissionService->getUserIndexPermission($admin));
-        //获取当前登录用户的所有访问入口和侧边栏分类
-        $data['menu'] = $routeService->getMenuRouteTree($permissionService->getUserRoutePermission($admin));
+        $menuCache = MenuCacheService::find($admin);
+
+        if (!$menuCache) {
+            //获取当前登录用户的首页
+            $data['index'] = $routeService->getIndexRoute($permissionService->getUserIndexPermission($admin));
+            //获取当前登录用户的所有访问入口和侧边栏分类
+            $data['menu'] = $routeService->getMenuRouteTree($permissionService->getUserRoutePermission($admin));
+            // 缓存 Menu
+            MenuCacheService::store($admin, $data);
+        } else {
+            $data = $menuCache;
+        }
 
         return $this->successWithData($data);
     }

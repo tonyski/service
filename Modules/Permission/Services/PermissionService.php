@@ -3,6 +3,7 @@
 namespace Modules\Permission\Services;
 
 use Modules\Permission\Contracts\PermissionService as ContractService;
+use Modules\Route\Services\MenuCacheService;
 
 class PermissionService implements ContractService
 {
@@ -12,12 +13,13 @@ class PermissionService implements ContractService
         foreach ($roles as $r) {
             $pivot[$r] = ['is_default' => $r == $defaultRole ? 1 : 0];
         }
-
+        $this->clearMenuCache($user);
         return $user->roles()->sync($pivot);
     }
 
     public function syncUserPermissions($user, $permissions)
     {
+        $this->clearMenuCache($user);
         return $user->permissions()->sync($permissions);
     }
 
@@ -31,5 +33,9 @@ class PermissionService implements ContractService
         return $user->getRoutePermissions();
     }
 
+    private function clearMenuCache($admin)
+    {
+        MenuCacheService::clear($admin);
+    }
 
 }
